@@ -1,0 +1,9 @@
+{
+  "id": "sudadera",
+  "nombre": "Sudadera Moros Viejos",
+  "descripcion": "Sudadera con capucha y serigrafía",
+  "precio": 35,
+  "categoria": "ropa",
+  "tallas": ["XS", "S", "M", "L", "XL", "XXL"],
+  "activo": true
+}

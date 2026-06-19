@@ -1,0 +1,866 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProductoCard from './ProductoCard.astro';
+
+export interface Props {
+  productos: CollectionEntry<'productos'>[];
+}
+
+const { productos } = Astro.props;
+
+const categorias = ['ropa', 'complementos', 'indumentaria'] as const;
+const catLabels: Record<string, string> = {
+  ropa: 'Ropa',
+  complementos: 'Complementos',
+  indumentaria: 'Indumentaria',
+};
+
+const porCategoria = categorias
+  .map((cat) => ({
+    cat,
+    label: catLabels[cat],
+    items: productos.filter((p) => p.data.categoria === cat),
+  }))
+  .filter((g) => g.items.length > 0);
+---
+
+<div class="tienda" id="tienda-root">
+  <div class="tienda-layout">
+    <!-- Catálogo -->
+    <section class="tienda-catalogo" id="tienda-catalogo">
+      {porCategoria.map(({ cat, label, items }) => (
+        <div class="catalogo__grupo">
+          <h2 class="catalogo__cat-title">{label}</h2>
+          <div class="catalogo__grid">
+            {items.map((prod) => (
+              <ProductoCard producto={prod} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <!-- Panel del pedido (desktop) -->
+    <aside class="pedido-panel" id="pedido-panel">
+      <h3 class="pedido-panel__titulo">Tu pedido</h3>
+
+      <!-- Estado vacío -->
+      <div class="carrito-vacio" id="carrito-vacio">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <p>Tu pedido está vacío</p>
+        <span>Añade productos del catálogo</span>
+      </div>
+
+      <!-- Tabla del pedido -->
+      <div class="pedido-tabla-wrapper" id="pedido-tabla-wrapper" hidden>
+        <table class="pedido-tabla" aria-label="Resumen del pedido">
+          <thead>
+            <tr>
+              <th scope="col" class="col-nombre">Producto</th>
+              <th scope="col" class="col-cantidad">Cant.</th>
+              <th scope="col" class="col-precio">Precio</th>
+              <th scope="col" class="col-accion"><span class="sr-only">Eliminar</span></th>
+            </tr>
+          </thead>
+          <tbody id="pedido-lineas" aria-live="polite"></tbody>
+          <tfoot>
+            <tr class="pedido-total-row">
+              <td colspan="2" class="pedido-total-label">Total</td>
+              <td class="pedido-total-valor" id="pedido-total">0,00 €</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Acciones -->
+      <div class="pedido-acciones" id="pedido-acciones" hidden>
+        <button type="button" class="btn btn--outline btn--sm" id="pedido-vaciar">Vaciar pedido</button>
+        <button type="button" class="btn btn--primary btn--full" id="pedido-finalizar" disabled>Finalizar pedido</button>
+      </div>
+
+      <!-- Formulario -->
+      <div id="formulario-container"></div>
+    </aside>
+  </div>
+
+  <!-- Móvil: barra inferior -->
+  <div class="pedido-barra-movil" id="pedido-barra-movil">
+    <div class="pedido-barra-movil__info">
+      <span class="pedido-barra-movil__items" id="barra-items">0 productos</span>
+      <span class="pedido-barra-movil__total" id="barra-total">0,00 €</span>
+    </div>
+    <button type="button" class="btn btn--outline btn--sm" data-abrir-pedido>Ver pedido</button>
+  </div>
+
+  <!-- Móvil: overlay -->
+  <div class="pedido-overlay" id="pedido-overlay"></div>
+
+  <!-- Móvil: drawer -->
+  <div class="pedido-drawer" id="pedido-drawer" role="dialog" aria-label="Resumen del pedido">
+    <div class="pedido-drawer__handle"></div>
+    <h3 class="pedido-drawer__titulo">Tu pedido</h3>
+
+    <div class="carrito-vacio" id="drawer-vacio">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <p>Tu pedido está vacío</p>
+      <span>Añade productos del catálogo</span>
+    </div>
+
+    <div class="pedido-tabla-wrapper" id="drawer-tabla-wrapper" hidden>
+      <table class="pedido-tabla" aria-label="Resumen del pedido">
+        <thead>
+          <tr>
+            <th scope="col" class="col-nombre">Producto</th>
+            <th scope="col" class="col-cantidad">Cant.</th>
+            <th scope="col" class="col-precio">Precio</th>
+            <th scope="col" class="col-accion"></th>
+          </tr>
+        </thead>
+        <tbody id="drawer-lineas" aria-live="polite"></tbody>
+        <tfoot>
+          <tr class="pedido-total-row">
+            <td colspan="2" class="pedido-total-label">Total</td>
+            <td class="pedido-total-valor" id="drawer-total">0,00 €</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="pedido-acciones" id="drawer-acciones" hidden>
+      <button type="button" class="btn btn--outline btn--sm" id="drawer-vaciar">Vaciar pedido</button>
+      <button type="button" class="btn btn--primary btn--full" id="drawer-finalizar" disabled>Finalizar pedido</button>
+    </div>
+
+    <div id="drawer-form-container"></div>
+  </div>
+</div>
+
+<style>
+  .tienda-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--space-2xl);
+    align-items: start;
+    padding-block: var(--space-2xl);
+  }
+
+  /* ── Catálogo ── */
+  .catalogo__grupo { margin-bottom: var(--space-2xl); }
+
+  .catalogo__cat-title {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--color-accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .catalogo__grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  /* ── Panel (desktop) ── */
+  .pedido-panel {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-xl));
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-md);
+  }
+
+  .pedido-panel__titulo {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-text-1);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* ── Estado vacío ── */
+  .carrito-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-sm);
+    padding: var(--space-2xl) var(--space-lg);
+    color: var(--color-text-3);
+  }
+
+  .carrito-vacio p {
+    font-weight: 500;
+    color: var(--color-text-2);
+  }
+
+  .carrito-vacio span {
+    font-size: var(--text-xs);
+  }
+
+  .carrito-vacio[hidden] { display: none; }
+
+  /* ── Tabla del pedido ── */
+  .pedido-tabla-wrapper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .pedido-tabla-wrapper[hidden] { display: none; }
+
+  .pedido-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    table-layout: fixed;
+  }
+
+  .pedido-tabla .col-nombre { width: auto; }
+  .pedido-tabla .col-cantidad { width: 86px; }
+  .pedido-tabla .col-precio { width: 68px; }
+  .pedido-tabla .col-accion { width: 40px; }
+
+  .pedido-tabla thead th {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0 0 var(--space-xs);
+    border-bottom: 2px solid var(--color-border);
+    text-align: left;
+  }
+
+  .pedido-tabla thead .col-precio,
+  .pedido-tabla thead .col-cantidad { text-align: center; }
+
+  .pedido-tabla tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s ease;
+  }
+
+  .pedido-tabla tbody tr:hover {
+    background-color: var(--color-surface-2);
+  }
+
+  .pedido-tabla td {
+    padding: var(--space-sm);
+    vertical-align: middle;
+  }
+
+  .linea-nombre {
+    display: block;
+    font-weight: 600;
+    color: var(--color-text-1);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .linea-talla {
+    display: inline-block;
+    margin-top: 2px;
+    font-size: var(--text-xs);
+    color: var(--color-text-3);
+    background-color: var(--color-surface-2);
+    border-radius: var(--radius-sm);
+    padding: 1px var(--space-sm);
+  }
+
+  .cantidad-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+  }
+
+  .btn-cantidad {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-size: var(--text-base);
+    line-height: 1;
+    color: var(--color-text-3);
+    background-color: var(--color-surface-2);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    padding: 0;
+    min-width: 32px;
+    min-height: 32px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .btn-cantidad:hover {
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+
+  .cantidad-valor {
+    font-weight: 700;
+    color: var(--color-text-2);
+    min-width: 1.5ch;
+    text-align: center;
+  }
+
+  .pedido-tabla .col-precio {
+    text-align: right;
+    font-weight: 600;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+
+  .btn-eliminar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 32px;
+    min-height: 32px;
+    color: var(--color-text-3);
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    padding: 0;
+    margin: 0 auto;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .btn-eliminar:hover {
+    color: var(--color-accent);
+    background-color: var(--color-surface-2);
+  }
+
+  /* ── Fila del total ── */
+  .pedido-total-row td {
+    padding: var(--space-sm);
+    border-top: 2px solid var(--color-border);
+  }
+
+  .pedido-total-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pedido-total-valor {
+    text-align: right;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text-1);
+    white-space: nowrap;
+  }
+
+  /* ── Acciones ── */
+  .pedido-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .pedido-acciones[hidden] { display: none; }
+
+  .btn {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-xl);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    background: none;
+    color: var(--color-text-1);
+    text-align: center;
+  }
+
+  .btn--primary {
+    background-color: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+
+  .btn--primary:hover { background-color: var(--color-accent-hover); }
+  .btn--primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn--full { width: 100%; }
+
+  .btn--outline {
+    background: none;
+    border-color: var(--color-border);
+    color: var(--color-text-2);
+  }
+
+  .btn--outline:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+  .btn--sm { padding: var(--space-xs) var(--space-md); font-size: var(--text-xs); }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* ── Móvil ── */
+  .pedido-barra-movil {
+    display: none;
+  }
+
+  .pedido-drawer {
+    display: none;
+  }
+
+  .pedido-overlay {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .tienda-layout {
+      grid-template-columns: 1fr;
+      padding-bottom: 80px;
+    }
+
+    .pedido-panel { display: none; }
+
+    .pedido-barra-movil {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg);
+      background-color: var(--color-surface-1);
+      border-top: 1px solid var(--color-border);
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+      z-index: 90;
+    }
+
+    .pedido-barra-movil__info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pedido-barra-movil__total {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--color-text-1);
+    }
+
+    .pedido-barra-movil__items {
+      font-size: var(--text-xs);
+      color: var(--color-text-3);
+    }
+
+    .pedido-drawer {
+      display: block;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      max-height: 85vh;
+      background-color: var(--color-surface-1);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
+      z-index: 100;
+      padding: var(--space-xl);
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pedido-drawer.abierto { transform: translateY(0); }
+
+    .pedido-drawer__handle {
+      width: 36px;
+      height: 4px;
+      background-color: var(--color-border);
+      border-radius: 999px;
+      margin: 0 auto var(--space-lg);
+    }
+
+    .pedido-drawer__titulo {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--color-text-1);
+      margin-bottom: var(--space-lg);
+    }
+
+    .pedido-overlay {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 350ms ease;
+    }
+
+    .pedido-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .pedido-tabla .col-cantidad { width: 90px; }
+    .pedido-tabla .col-precio { width: 64px; }
+
+    .cantidad-control { gap: var(--space-xs); }
+  }
+</style>
+
+<script>
+  interface LineaCarrito {
+    id: string;
+    nombre: string;
+    talla: string;
+    cantidad: number;
+    precioUnit: number;
+  }
+
+  let carrito: LineaCarrito[] = [];
+  let formularioVisible = false;
+
+  // ── Helpers ──
+
+  function calcularTotal(): number {
+    return carrito.reduce((sum, l) => sum + l.precioUnit * l.cantidad, 0);
+  }
+
+  function contarItems(): number {
+    return carrito.reduce((sum, l) => sum + l.cantidad, 0);
+  }
+
+  function generarResumenTexto(): string {
+    if (carrito.length === 0) return '';
+    return carrito.map(l =>
+      `${l.nombre}${l.talla ? ` (${l.talla})` : ''} x${l.cantidad} = ${(l.precioUnit * l.cantidad).toFixed(2)}€`
+    ).join('\n') + '\n\nTOTAL: ' + calcularTotal().toFixed(2) + '€';
+  }
+
+  function formatEur(n: number): string {
+    return n.toFixed(2).replace('.', ',') + ' €';
+  }
+
+  function filaHTML(l: LineaCarrito, i: number): string {
+    const subtotal = l.cantidad * l.precioUnit;
+    return `
+      <tr data-id="${l.id}" data-talla="${l.talla}" data-idx="${i}">
+        <td class="col-nombre">
+          <span class="linea-nombre">${l.nombre}</span>
+          ${l.talla ? `<span class="linea-talla">${l.talla}</span>` : ''}
+        </td>
+        <td class="col-cantidad">
+          <div class="cantidad-control">
+            <button class="btn-cantidad" data-accion="restar" data-idx="${i}" aria-label="Reducir cantidad de ${l.nombre}">−</button>
+            <span class="cantidad-valor">${l.cantidad}</span>
+            <button class="btn-cantidad" data-accion="sumar" data-idx="${i}" aria-label="Aumentar cantidad de ${l.nombre}">+</button>
+          </div>
+        </td>
+        <td class="col-precio">${formatEur(subtotal)}</td>
+        <td class="col-accion">
+          <button class="btn-eliminar" data-eliminar="${i}" aria-label="Eliminar ${l.nombre}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </td>
+      </tr>`;
+  }
+
+  // ── Render ──
+
+  function renderizarCarrito() {
+    const total = calcularTotal();
+    const items = contarItems();
+    const vacio = carrito.length === 0;
+
+    // Desktop
+    const tablaW = document.getElementById('pedido-tabla-wrapper')!;
+    const tbody = document.getElementById('pedido-lineas')!;
+    const totalEl = document.getElementById('pedido-total')!;
+    const vacioEl = document.getElementById('carrito-vacio')!;
+    const accionesEl = document.getElementById('pedido-acciones')!;
+    const finalizarBtn = document.getElementById('pedido-finalizar') as HTMLButtonElement;
+
+    // Móvil
+    const barraTotal = document.getElementById('barra-total')!;
+    const barraItems = document.getElementById('barra-items')!;
+    const dTablaW = document.getElementById('drawer-tabla-wrapper')!;
+    const dTbody = document.getElementById('drawer-lineas')!;
+    const dTotalEl = document.getElementById('drawer-total')!;
+    const dVacioEl = document.getElementById('drawer-vacio')!;
+    const dAccionesEl = document.getElementById('drawer-acciones')!;
+    const dFinalizarBtn = document.getElementById('drawer-finalizar') as HTMLButtonElement;
+
+    // Total común
+    const totalStr = formatEur(total);
+
+    // Desktop
+    totalEl.textContent = totalStr;
+    barraTotal.textContent = totalStr;
+    barraItems.textContent = `${items} producto${items !== 1 ? 's' : ''}`;
+    finalizarBtn.disabled = vacio;
+    dFinalizarBtn.disabled = vacio;
+
+    if (vacio) {
+      tablaW.setAttribute('hidden', '');
+      accionesEl.setAttribute('hidden', '');
+      vacioEl.removeAttribute('hidden');
+      dTablaW.setAttribute('hidden', '');
+      dAccionesEl.setAttribute('hidden', '');
+      dVacioEl.removeAttribute('hidden');
+      cerrarFormulario();
+    } else {
+      vacioEl.setAttribute('hidden', '');
+      tablaW.removeAttribute('hidden');
+      accionesEl.removeAttribute('hidden');
+      dVacioEl.setAttribute('hidden', '');
+      dTablaW.removeAttribute('hidden');
+      dAccionesEl.removeAttribute('hidden');
+
+      const filas = carrito.map((l, i) => filaHTML(l, i)).join('');
+      tbody.innerHTML = filas;
+      dTbody.innerHTML = filas;
+    }
+  }
+
+  function cerrarFormulario() {
+    formularioVisible = false;
+    const c1 = document.getElementById('formulario-container');
+    if (c1) c1.innerHTML = '';
+    const c2 = document.getElementById('drawer-form-container');
+    if (c2) c2.innerHTML = '';
+  }
+
+  // ── Formulario ──
+
+  function mostrarFormulario(containerId: string) {
+    if (carrito.length === 0) return;
+    formularioVisible = true;
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const resumen = generarResumenTexto();
+    const total = formatEur(calcularTotal());
+
+    container.innerHTML = `
+      <div class="formulario-pedido" style="margin-top:var(--space-lg);">
+        <div class="formulario-pedido__resumen" style="margin-bottom:var(--space-md);padding:var(--space-sm) var(--space-md);background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:var(--text-sm);">
+          <h4 style="font-family:var(--font-display);font-size:var(--text-xs);color:var(--color-text-2);margin-bottom:var(--space-xs);text-transform:uppercase;letter-spacing:0.05em;">Resumen del pedido</h4>
+          <pre style="font-family:var(--font-body);font-size:var(--text-sm);color:var(--color-text-1);white-space:pre-wrap;margin:0;">${resumen}</pre>
+        </div>
+        <form id="pedido-form-${containerId}" style="display:flex;flex-direction:column;">
+          <input type="hidden" name="resumen_pedido" value="${resumen.replace(/"/g,'&quot;')}" />
+          <input type="hidden" name="total_pedido" value="${total}" />
+          <input type="hidden" name="_subject" value="Nuevo pedido — Tienda Moros Viejos" />
+          <div style="margin-bottom:var(--space-md);">
+            <label style="display:block;font-size:var(--text-sm);font-weight:600;color:var(--color-text-2);margin-bottom:var(--space-xs);">Nombre completo *</label>
+            <input type="text" name="nombre" required style="width:100%;padding:var(--space-sm) var(--space-md);border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:var(--text-base);background:var(--color-surface-1);color:var(--color-text-1);box-sizing:border-box;" />
+          </div>
+          <div style="margin-bottom:var(--space-md);">
+            <label style="display:block;font-size:var(--text-sm);font-weight:600;color:var(--color-text-2);margin-bottom:var(--space-xs);">Correo electrónico *</label>
+            <input type="email" name="email" required style="width:100%;padding:var(--space-sm) var(--space-md);border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:var(--text-base);background:var(--color-surface-1);color:var(--color-text-1);box-sizing:border-box;" />
+          </div>
+          <div style="margin-bottom:var(--space-md);">
+            <label style="display:block;font-size:var(--text-sm);font-weight:600;color:var(--color-text-2);margin-bottom:var(--space-xs);">Teléfono *</label>
+            <input type="tel" name="telefono" required style="width:100%;padding:var(--space-sm) var(--space-md);border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:var(--text-base);background:var(--color-surface-1);color:var(--color-text-1);box-sizing:border-box;" />
+          </div>
+          <div style="margin-bottom:var(--space-md);">
+            <label style="display:block;font-size:var(--text-sm);font-weight:600;color:var(--color-text-2);margin-bottom:var(--space-xs);">Notas adicionales</label>
+            <textarea name="notas" rows="3" placeholder="Tallas, colores…" style="width:100%;padding:var(--space-sm) var(--space-md);border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:var(--text-base);background:var(--color-surface-1);color:var(--color-text-1);resize:vertical;box-sizing:border-box;"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full" id="pedido-submit-${containerId}">Enviar pedido</button>
+        </form>
+        <p style="font-size:var(--text-xs);color:var(--color-text-3);text-align:center;margin-top:var(--space-md);">Al enviar recibirás una copia. El responsable se pondrá en contacto para confirmar el pago y la entrega.</p>
+      </div>
+    `;
+
+    const form = document.getElementById(`pedido-form-${containerId}`) as HTMLFormElement;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const resumenInput = form.querySelector<HTMLInputElement>('[name="resumen_pedido"]');
+      const totalInput = form.querySelector<HTMLInputElement>('[name="total_pedido"]');
+      if (resumenInput) resumenInput.value = generarResumenTexto();
+      if (totalInput) totalInput.value = formatEur(calcularTotal());
+
+      const emailInput = form.querySelector<HTMLInputElement>('[name="email"]');
+      const existingReply = form.querySelector<HTMLInputElement>('[name="_replyto"]');
+      if (emailInput && !existingReply) {
+        const h = document.createElement('input');
+        h.type = 'hidden'; h.name = '_replyto'; h.value = emailInput.value;
+        form.appendChild(h);
+      }
+
+      const submitBtn = document.getElementById(`pedido-submit-${containerId}`) as HTMLButtonElement;
+      const fields = form.querySelectorAll<HTMLInputElement|HTMLTextAreaElement>('input,textarea');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando…'; }
+      fields.forEach(f => (f.disabled = true));
+
+      try {
+        const data = new FormData(form);
+        const res = await fetch('https://formspree.io/f/FORMSPREE_ID', {
+          method: 'POST', body: data, headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          form.setAttribute('hidden', '');
+          container.querySelector('p:last-child')?.setAttribute('hidden', '');
+          const exito = document.createElement('div');
+          exito.style.cssText = 'text-align:center;padding:var(--space-lg) 0;display:flex;flex-direction:column;align-items:center;gap:var(--space-md);';
+          exito.innerHTML = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="var(--color-accent)" stroke-width="2"/><path d="M14 24l7 7 13-13" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><p style="font-size:var(--text-sm);color:var(--color-text-2);">¡Pedido recibido! Nos pondremos en contacto contigo en breve.</p><button type="button" class="btn btn--outline" id="pedido-otro-${containerId}">Hacer otro pedido</button>`;
+          container.appendChild(exito);
+          document.getElementById(`pedido-otro-${containerId}`)?.addEventListener('click', () => {
+            carrito = []; renderizarCarrito(); cerrarFormulario();
+          });
+        } else {
+          mostrarError(container, form);
+        }
+      } catch {
+        mostrarError(container, form);
+      }
+    });
+  }
+
+  function mostrarError(container: HTMLElement, form: HTMLFormElement) {
+    form.setAttribute('hidden', '');
+    container.querySelector('p:last-child')?.setAttribute('hidden', '');
+    const err = document.createElement('div');
+    err.style.cssText = 'text-align:center;padding:var(--space-lg) 0;display:flex;flex-direction:column;align-items:center;gap:var(--space-md);';
+    err.innerHTML = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="var(--color-accent)" stroke-width="2"/><path d="M16 16l16 16M32 16L16 32" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round"/></svg><p style="font-size:var(--text-sm);color:var(--color-text-2);">Hubo un problema. Contacta en <strong>morosviejos@mojacar.es</strong></p><button type="button" class="btn btn--outline retry-btn">Reintentar</button>`;
+    container.appendChild(err);
+    (err.querySelector('.retry-btn') as HTMLButtonElement)?.addEventListener('click', () => {
+      err.remove();
+      form.removeAttribute('hidden');
+      container.querySelector('p:last-child')?.removeAttribute('hidden');
+      const sb = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      if (sb) { sb.disabled = false; sb.textContent = 'Enviar pedido'; }
+      form.querySelectorAll('input,textarea').forEach(f => (f as HTMLInputElement|HTMLTextAreaElement).disabled = false);
+    });
+  }
+
+  // ── Event Listeners ──
+
+  // Añadir desde catálogo
+  document.getElementById('tienda-catalogo')?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.producto-card__add');
+    if (!btn) return;
+    const card = btn.closest<HTMLElement>('.producto-card');
+    if (!card) return;
+    const productoId = card.dataset.productoId || '';
+    const nombre = card.querySelector('.producto-card__name')?.textContent?.trim() || '';
+    const tallaSelect = card.querySelector<HTMLSelectElement>('.producto-card__talla');
+    const talla = tallaSelect?.value || '';
+    if (tallaSelect && !talla) {
+      tallaSelect.style.borderColor = 'var(--color-accent)';
+      setTimeout(() => tallaSelect.style.borderColor = '', 1500);
+      return;
+    }
+    const qtyInput = card.querySelector<HTMLInputElement>('.producto-card__qty');
+    const cantidad = qtyInput ? Math.max(1, Math.min(20, parseInt(qtyInput.value) || 1)) : 1;
+    if (qtyInput) qtyInput.value = '1';
+    if (tallaSelect) tallaSelect.value = '';
+    const precioEl = card.querySelector('.producto-card__price');
+    const precio = precioEl ? parseFloat((precioEl.textContent || '0').replace(/[^0-9,.]/g, '').replace(',', '.')) : 0;
+
+    const existente = carrito.find(l => l.id === productoId && l.talla === talla);
+    if (existente) {
+      existente.cantidad = Math.min(20, existente.cantidad + cantidad);
+    } else {
+      carrito.push({ id: productoId, nombre, talla, cantidad, precioUnit: precio });
+    }
+    renderizarCarrito();
+  });
+
+  // Controles de cantidad y eliminar en tabla (delegación)
+  function attachTablaListeners(tbodyId: string) {
+    const tbody = document.getElementById(tbodyId);
+    tbody?.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      // +/−
+      const ctlBtn = target.closest<HTMLButtonElement>('.btn-cantidad');
+      if (ctlBtn) {
+        const accion = ctlBtn.dataset.accion;
+        const idx = parseInt(ctlBtn.dataset.idx || '');
+        if (idx >= 0 && idx < carrito.length) {
+          if (accion === 'restar') {
+            if (carrito[idx].cantidad > 1) { carrito[idx].cantidad--; }
+            else { carrito.splice(idx, 1); }
+          } else if (accion === 'sumar') {
+            carrito[idx].cantidad = Math.min(20, carrito[idx].cantidad + 1);
+          }
+          renderizarCarrito();
+        }
+        return;
+      }
+      // Eliminar
+      const delBtn = target.closest<HTMLButtonElement>('.btn-eliminar');
+      if (delBtn) {
+        const idx = parseInt(delBtn.dataset.eliminar || '');
+        if (idx >= 0 && idx < carrito.length) {
+          carrito.splice(idx, 1);
+          renderizarCarrito();
+        }
+      }
+    });
+  }
+
+  attachTablaListeners('pedido-lineas');
+  attachTablaListeners('drawer-lineas');
+
+  // Vaciar
+  document.getElementById('pedido-vaciar')?.addEventListener('click', () => { carrito = []; renderizarCarrito(); });
+  document.getElementById('drawer-vaciar')?.addEventListener('click', () => { carrito = []; renderizarCarrito(); });
+
+  // Finalizar
+  document.getElementById('pedido-finalizar')?.addEventListener('click', () => mostrarFormulario('formulario-container'));
+  document.getElementById('drawer-finalizar')?.addEventListener('click', () => mostrarFormulario('drawer-form-container'));
+
+  // Móvil: drawer
+  const drawer = document.getElementById('pedido-drawer')!;
+  const overlay = document.getElementById('pedido-overlay')!;
+
+  function abrirDrawer() {
+    drawer.classList.add('abierto');
+    overlay.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function cerrarDrawer() {
+    drawer.classList.remove('abierto');
+    overlay.classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-abrir-pedido]').forEach(b => b.addEventListener('click', abrirDrawer));
+  overlay.addEventListener('click', cerrarDrawer);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarDrawer(); });
+</script>

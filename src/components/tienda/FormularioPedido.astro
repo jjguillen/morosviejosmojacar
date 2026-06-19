@@ -1,0 +1,200 @@
+---
+export interface Props {
+  resumenTexto: string;
+  total: string;
+}
+
+const { resumenTexto, total } = Astro.props;
+---
+
+<div class="formulario-pedido" id="formulario-pedido">
+  <h3 class="formulario-pedido__titulo">Tus datos</h3>
+
+  <div class="formulario-pedido__resumen">
+    <h4>Resumen del pedido</h4>
+    <pre>{resumenTexto}</pre>
+  </div>
+
+  <form id="pedido-form" class="formulario-pedido__form">
+    <input type="hidden" name="resumen_pedido" value={resumenTexto} />
+    <input type="hidden" name="total_pedido" value={total} />
+    <input type="hidden" name="_subject" value="Nuevo pedido — Tienda Moros Viejos" />
+
+    <div class="form-field">
+      <label for="nombre">Nombre completo *</label>
+      <input type="text" id="nombre" name="nombre" required />
+    </div>
+    <div class="form-field">
+      <label for="email">Correo electrónico *</label>
+      <input type="email" id="email" name="email" required />
+    </div>
+    <div class="form-field">
+      <label for="telefono">Teléfono *</label>
+      <input type="tel" id="telefono" name="telefono" required />
+    </div>
+    <div class="form-field">
+      <label for="notas">Notas adicionales</label>
+      <textarea id="notas" name="notas" rows="3" placeholder="Tallas, colores…"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn--primary btn--full" id="pedido-submit-btn">
+      Enviar pedido
+    </button>
+  </form>
+
+  <div class="formulario-pedido__estado formulario-pedido__estado--exito" id="pedido-exito" hidden>
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="var(--color-accent)" stroke-width="2"/><path d="M14 24l7 7 13-13" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <p class="formulario-pedido__mensaje">¡Pedido recibido! Nos pondremos en contacto contigo en breve para confirmar los detalles.</p>
+    <button type="button" class="btn btn--outline" id="pedido-otro-btn">Hacer otro pedido</button>
+  </div>
+
+  <div class="formulario-pedido__estado formulario-pedido__estado--error" id="pedido-error" hidden>
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="var(--color-accent)" stroke-width="2"/><path d="M16 16l16 16M32 16L16 32" stroke="var(--color-accent)" stroke-width="3" stroke-linecap="round"/></svg>
+    <p class="formulario-pedido__mensaje">Hubo un problema al enviar el pedido. Puedes contactarnos directamente en <strong>morosviejos@mojacar.es</strong></p>
+  </div>
+
+  <p class="formulario-pedido__aviso">
+    Al enviar recibirás una copia. El responsable se pondrá en contacto para confirmar el pago y la entrega.
+  </p>
+</div>
+
+<style>
+  .formulario-pedido {
+    background-color: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin-top: var(--space-lg);
+  }
+
+  .formulario-pedido__titulo {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-text-1);
+    margin-bottom: var(--space-lg);
+  }
+
+  .formulario-pedido__resumen {
+    margin-bottom: var(--space-xl);
+    padding: var(--space-md);
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .formulario-pedido__resumen h4 {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: var(--color-text-2);
+    margin-bottom: var(--space-sm);
+  }
+
+  .formulario-pedido__resumen pre {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-text-1);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin: 0;
+  }
+
+  .form-field {
+    margin-bottom: var(--space-md);
+  }
+
+  .form-field label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-2);
+    margin-bottom: var(--space-xs);
+  }
+
+  .form-field input,
+  .form-field textarea {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-base);
+    color: var(--color-text-1);
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s ease;
+  }
+
+  .form-field input:focus,
+  .form-field textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .form-field textarea {
+    resize: vertical;
+  }
+
+  .formulario-pedido__estado {
+    text-align: center;
+    padding: var(--space-xl) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .formulario-pedido__mensaje {
+    font-size: var(--text-base);
+    color: var(--color-text-2);
+    max-width: 24rem;
+  }
+
+  .formulario-pedido__aviso {
+    font-size: var(--text-xs);
+    color: var(--color-text-3);
+    text-align: center;
+    margin-top: var(--space-md);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-xl);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn--primary {
+    background-color: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+
+  .btn--primary:hover {
+    background-color: var(--color-accent-hover);
+  }
+
+  .btn--primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .btn--full {
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn--outline {
+    background: none;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .btn--outline:hover {
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+</style>

@@ -1,0 +1,187 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  producto: CollectionEntry<'productos'>;
+}
+
+const { producto } = Astro.props;
+const { id, nombre, descripcion, precio, tallas } = producto.data;
+---
+
+<article class="producto-card" data-producto-id={id}>
+  <div class="producto-card__img" aria-hidden="true">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+      <rect width="56" height="56" rx="10" fill="var(--color-accent)" opacity="0.12"/>
+      <path d="M18 32h20l-5-12H23l-5 12z" stroke="var(--color-accent)" stroke-width="1.5" fill="none"/>
+      <circle cx="23" cy="34" r="2.5" fill="var(--color-accent)" opacity="0.6"/>
+      <circle cx="33" cy="34" r="2.5" fill="var(--color-accent)" opacity="0.6"/>
+    </svg>
+  </div>
+  <div class="producto-card__body">
+    <h3 class="producto-card__name">{nombre}</h3>
+    {descripcion && <p class="producto-card__desc">{descripcion}</p>}
+    <span class="producto-card__price">{precio} €</span>
+
+    {tallas ? (
+      <div class="producto-card__controls">
+        <select class="producto-card__talla" name={`talla-${id}`} aria-label="Talla" required>
+          <option value="">Talla</option>
+          {tallas.map((t) => <option value={t}>{t}</option>)}
+        </select>
+        <div class="producto-card__qty-row">
+          <input
+            type="number"
+            class="producto-card__qty"
+            name={`qty-${id}`}
+            min="1"
+            max="20"
+            value="1"
+            aria-label="Cantidad"
+          />
+          <button type="button" class="btn btn--add producto-card__add" data-add={id}>
+            Añadir
+          </button>
+        </div>
+      </div>
+    ) : (
+      <div class="producto-card__controls">
+        <div class="producto-card__qty-row producto-card__qty-row--no-talla">
+          <span class="producto-card__no-talla">Sin talla</span>
+          <button type="button" class="btn btn--add producto-card__add" data-add={id}>
+            Añadir ×1
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  .producto-card {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background-color: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+
+  .producto-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .producto-card__img {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-1);
+  }
+
+  .producto-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    flex: 1;
+    min-width: 0;
+  }
+
+  .producto-card__name {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-text-1);
+  }
+
+  .producto-card__desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-2);
+    line-height: 1.5;
+  }
+
+  .producto-card__price {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-accent);
+    margin: var(--space-xs) 0;
+  }
+
+  .producto-card__controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .producto-card__talla {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-1);
+    color: var(--color-text-1);
+    cursor: pointer;
+  }
+
+  .producto-card__talla:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .producto-card__qty-row {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+
+  .producto-card__qty-row--no-talla {
+    justify-content: space-between;
+  }
+
+  .producto-card__qty {
+    width: 3.5rem;
+    padding: var(--space-xs);
+    font-size: var(--text-sm);
+    text-align: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface-1);
+    color: var(--color-text-1);
+  }
+
+  .producto-card__qty:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .producto-card__no-talla {
+    font-size: var(--text-xs);
+    color: var(--color-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn--add {
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-accent);
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn--add:hover {
+    background-color: var(--color-accent-hover);
+  }
+</style>

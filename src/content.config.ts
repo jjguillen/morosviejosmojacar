@@ -27,4 +27,18 @@ const galeria = defineCollection({
   }),
 });
 
-export const collections = { noticias, galeria };
+const productos = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: 'src/content/productos' }),
+  schema: z.object({
+    id: z.string(),
+    nombre: z.string(),
+    descripcion: z.string().optional(),
+    precio: z.number(),
+    imagen: z.string().optional(),
+    categoria: z.enum(['ropa', 'complementos', 'indumentaria']),
+    tallas: z.array(z.string()).optional(),
+    activo: z.boolean().default(true),
+  }),
+});
+
+export const collections = { noticias, galeria, productos };

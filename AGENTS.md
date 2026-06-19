@@ -31,12 +31,15 @@ src/
 ├── content/
 │   ├── noticias/           # colección markdown
 │   └── galeria/            # colección data (JSON)
+├── data/
+│   └── productos.js        # catálogo de la tienda
 ├── layouts/
 │   └── BaseLayout.astro    # head, SEO, header, footer, dark mode
 ├── pages/
 │   ├── index.astro
 │   ├── historia.astro
 │   ├── galeria.astro
+│   ├── tienda.astro        # productos + formulario de pedido
 │   ├── unete.astro
 │   └── noticias/
 │       ├── index.astro

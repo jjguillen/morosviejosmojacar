@@ -1,0 +1,8 @@
+{
+  "id": "bolso",
+  "nombre": "Bolso Moros Viejos",
+  "descripcion": "Bolso de tela con estampado de la kabila",
+  "precio": 18,
+  "categoria": "complementos",
+  "activo": true
+}

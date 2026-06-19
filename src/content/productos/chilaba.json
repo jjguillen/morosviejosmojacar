@@ -1,0 +1,9 @@
+{
+  "id": "chilaba",
+  "nombre": "Chilaba Moros Viejos",
+  "descripcion": "Chilaba oficial de la kabila Alí-Cuquei, confeccionada en tela tradicional",
+  "precio": 85,
+  "categoria": "indumentaria",
+  "tallas": ["S", "M", "L", "XL", "XXL"],
+  "activo": true
+}

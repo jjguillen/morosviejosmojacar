@@ -1,0 +1,8 @@
+{
+  "id": "pin",
+  "nombre": "Pin Kabila Alí-Cuquei",
+  "descripcion": "Pin metálico esmaltado con el escudo de la kabila",
+  "precio": 3,
+  "categoria": "complementos",
+  "activo": true
+}
