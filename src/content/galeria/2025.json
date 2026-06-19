@@ -1,0 +1,35 @@
+{
+  "year": 2025,
+  "photos": [
+    {
+      "src": "/assets/galeria/2025/desfile-01.jpg",
+      "alt": "Kabila Moros Viejos desfilando por las calles de Mojácar con sus estandartes",
+      "caption": "La kabila en formación durante el Gran Desfile"
+    },
+    {
+      "src": "/assets/galeria/2025/desfile-02.jpg",
+      "alt": "Detalle de los nuevos trajes de la kabila con bordados dorados sobre fondo burdeos",
+      "caption": "Nueva indumentaria 2025"
+    },
+    {
+      "src": "/assets/galeria/2025/desfile-03.jpg",
+      "alt": "Miembros de la kabila posando frente a la Iglesia de Santa María",
+      "caption": "Frente a la sede de la Plaza del Parterre"
+    },
+    {
+      "src": "/assets/galeria/2025/desfile-04.jpg",
+      "alt": "Desembarco moro en la Playa del Descargador",
+      "caption": "Momento del desembarco moro"
+    },
+    {
+      "src": "/assets/galeria/2025/desfile-05.jpg",
+      "alt": "Estandarte de la Kabila Alí-Cuquei al viento durante el desfile",
+      "caption": "Orgullo y tradición"
+    },
+    {
+      "src": "/assets/galeria/2025/desfile-06.jpg",
+      "alt": "Encuentro de los bandos moro y cristiano en la Plaza Nueva",
+      "caption": "Sin vencidos ni vencedores"
+    }
+  ]
+}

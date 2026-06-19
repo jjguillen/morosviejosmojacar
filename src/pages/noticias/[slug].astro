@@ -1,0 +1,183 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const noticias = await getCollection('noticias', ({ data }) => !data.draft);
+  return noticias.map((entry) => ({
+    params: { slug: entry.id },
+    props: { id: entry.id },
+  }));
+}
+
+const { id } = Astro.props;
+const entry = await getEntry('noticias', id);
+
+if (!entry) {
+  return Astro.redirect('/noticias');
+}
+
+const { title, pubDate, excerpt, cover, tags } = entry.data;
+const { Content } = await render(entry);
+
+const dateStr = pubDate.toLocaleDateString('es-ES', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={excerpt}>
+  <article class="article">
+    <header class="article__header">
+      <div class="container">
+        <time class="article__date" datetime={pubDate.toISOString()}>
+          {dateStr}
+        </time>
+        <h1 class="article__title">{title}</h1>
+        {tags.length > 0 && (
+          <div class="article__tags">
+            {tags.map((tag) => (
+              <span class="article__tag">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    {cover && (
+      <div class="article__cover container">
+        <img src={cover} alt={title} />
+      </div>
+    )}
+
+    <div class="article__body container">
+      <div class="article__content">
+        <Content />
+      </div>
+
+      <footer class="article__footer">
+        <a href="/noticias" class="btn">&larr; Volver a noticias</a>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article__header {
+    text-align: center;
+    padding: var(--space-4xl) 0 var(--space-2xl);
+  }
+
+  .article__date {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: var(--color-accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-md);
+  }
+
+  .article__title {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    color: var(--color-text-1);
+    line-height: 1.2;
+  }
+
+  .article__tags {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+
+  .article__tag {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-3);
+    background-color: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .article__cover {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .article__cover img {
+    width: 100%;
+    max-height: 28rem;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+
+  .article__body {
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: var(--space-4xl);
+  }
+
+  .article__content {
+    font-size: var(--text-lg);
+    line-height: 1.8;
+    color: var(--color-text-2);
+  }
+
+  .article__content :global(h2) {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--color-text-1);
+    margin: var(--space-2xl) 0 var(--space-md);
+  }
+
+  .article__content :global(p) {
+    margin-bottom: var(--space-md);
+  }
+
+  .article__content :global(strong) {
+    color: var(--color-text-1);
+    font-weight: 600;
+  }
+
+  .article__footer {
+    margin-top: var(--space-3xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-xl);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-1);
+    background-color: var(--color-surface-1);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 768px) {
+    .article__title {
+      font-size: var(--text-3xl);
+    }
+
+    .article__content {
+      font-size: var(--text-base);
+    }
+  }
+</style>

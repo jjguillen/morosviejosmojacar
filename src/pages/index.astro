@@ -1,17 +1,363 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import NewsCard from '../components/NewsCard.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
 
+const noticias = await getCollection('noticias', ({ data }) => !data.draft);
+const recientes = noticias
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const galerias = await getCollection('galeria');
+const ultimaGaleria = galerias.sort((a, b) => b.data.year - a.data.year)[0];
+const fotosDestacadas = ultimaGaleria?.data.photos.slice(0, 6) ?? [];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <HeroSection
+    image="/placeholder-hero.jpg"
+    imageAlt="Kabila Moros Viejos desfilando en las fiestas de Moros y Cristianos de Mojácar"
+  />
+
+  <section class="section quienes">
+    <div class="container">
+      <h2 class="section__title">&iquest;Qui&eacute;nes somos?</h2>
+      <div class="quienes__grid">
+        <div class="quienes__text">
+          <p>
+            Somos la <strong>Kabila &ldquo;Al&iacute;-Cuquei&rdquo;</strong>, una de las cuatro kabilas
+            del bando moro en las <strong>Fiestas de Moros y Cristianos de Moj&aacute;car</strong>.
+            Fundada en <strong>1988</strong>, somos una de las agrupaciones fundadoras de estas fiestas
+            que conmemoran la entrega pac&iacute;fica de la ciudad a los Reyes Cat&oacute;licos en 1488.
+          </p>
+          <p>
+            Nuestra sede est&aacute; en la <strong>Plaza del Parterre</strong>, junto a la Iglesia de
+            Santa Mar&iacute;a, en el coraz&oacute;n del casco antiguo de Moj&aacute;car. Desde aqu&iacute;
+            preparamos cada a&ntilde;o nuestras actividades y el gran desfile.
+          </p>
+          <p class="quienes__motto">
+            &ldquo;Sin vencidos ni vencedores&rdquo; &mdash; lema que refleja el esp&iacute;ritu
+            de concordia de nuestras fiestas.
+          </p>
+        </div>
+        <div class="quienes__data">
+          <div class="quienes__stat">
+            <span class="quienes__stat-num">1988</span>
+            <span class="quienes__stat-label">A&ntilde;o de fundaci&oacute;n</span>
+          </div>
+          <div class="quienes__stat">
+            <span class="quienes__stat-num">200+</span>
+            <span class="quienes__stat-label">Miembros</span>
+          </div>
+          <div class="quienes__stat">
+            <span class="quienes__stat-num">4</span>
+            <span class="quienes__stat-label">Kabilas moras</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section proxima">
+    <div class="container">
+      <h2 class="section__title">Pr&oacute;xima cita</h2>
+      <div class="proxima__card">
+        <div class="proxima__fecha">
+          <span class="proxima__dia">13&ndash;14</span>
+          <span class="proxima__mes">Junio</span>
+          <span class="proxima__ano">2026</span>
+        </div>
+        <div class="proxima__info">
+          <h3>Fiestas de Moros y Cristianos 2026</h3>
+          <ul>
+            <li><strong>S&aacute;bado 13:</strong> Mercado medieval y desembarco moro en Playa del Descargador</li>
+            <li><strong>Domingo 14:</strong> Trabucada, torneo a caballo y Gran Desfile</li>
+          </ul>
+          <p class="proxima__lugar">Moj&aacute;car (Almer&iacute;a) &mdash; Casco antiguo y Plaza Nueva</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {recientes.length > 0 && (
+    <section class="section noticias">
+      <div class="container">
+        <h2 class="section__title">&Uacute;ltimas noticias</h2>
+        <div class="noticias__grid">
+          {recientes.map((entry) => (
+            <NewsCard entry={entry} featured={recientes[0]?.id === entry.id} />
+          ))}
+        </div>
+        <div class="noticias__more">
+          <a href="/noticias" class="btn">Ver todas las noticias</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {fotosDestacadas.length > 0 && (
+    <section class="section galeria">
+      <div class="container">
+        <h2 class="section__title">Galer&iacute;a destacada</h2>
+        <GalleryGrid photos={fotosDestacadas} />
+        <div class="galeria__more">
+          <a href="/galeria" class="btn">Ver galer&iacute;a completa</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section cta">
+    <div class="container cta__inner">
+      <h2 class="cta__title">&iquest;Quieres formar parte?</h2>
+      <p>
+        Si te gustan las fiestas, la tradici&oacute;n y el buen ambiente, la Kabila Moros Viejos
+        te espera con los brazos abiertos. Ven a conocernos.
+      </p>
+      <a href="/unete" class="btn btn--primary">&Uacute;nete a la kabila</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section {
+    padding: var(--space-4xl) 0;
+  }
+
+  .section__title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--color-text-1);
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+    position: relative;
+  }
+
+  .section__title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent-2);
+    margin: var(--space-md) auto 0;
+  }
+
+  /* ── ¿Quiénes somos? ── */
+  .quienes__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-3xl);
+    align-items: start;
+  }
+
+  .quienes__text {
+    font-size: var(--text-lg);
+    color: var(--color-text-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .quienes__text strong {
+    color: var(--color-text-1);
+  }
+
+  .quienes__motto {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-xl);
+    color: var(--color-accent);
+    margin-top: var(--space-md);
+    padding-left: var(--space-lg);
+    border-left: 3px solid var(--color-accent-2);
+  }
+
+  .quienes__data {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .quienes__stat {
+    text-align: center;
+    padding: var(--space-xl);
+    background-color: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .quienes__stat-num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .quienes__stat-label {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: var(--space-xs);
+  }
+
+  /* ── Próxima cita ── */
+  .proxima__card {
+    display: flex;
+    gap: var(--space-2xl);
+    background-color: var(--color-surface-2);
+    border: 2px solid var(--color-accent-2);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+
+  .proxima__fecha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 8rem;
+    text-align: center;
+  }
+
+  .proxima__dia {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 800;
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .proxima__mes {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .proxima__ano {
+    font-size: var(--text-sm);
+    color: var(--color-text-3);
+    margin-top: var(--space-xs);
+  }
+
+  .proxima__info h3 {
+    font-size: var(--text-xl);
+    color: var(--color-text-1);
+    margin-bottom: var(--space-md);
+  }
+
+  .proxima__info ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    color: var(--color-text-2);
+    font-size: var(--text-sm);
+  }
+
+  .proxima__info ul strong {
+    color: var(--color-text-1);
+  }
+
+  .proxima__lugar {
+    margin-top: var(--space-md);
+    font-size: var(--text-sm);
+    color: var(--color-text-3);
+    font-style: italic;
+  }
+
+  /* ── Noticias ── */
+  .noticias__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-xl);
+  }
+
+  .noticias__more,
+  .galeria__more {
+    text-align: center;
+    margin-top: var(--space-2xl);
+  }
+
+  /* ── CTA ── */
+  .cta {
+    background-color: var(--color-surface-2);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cta__inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .cta__title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--color-text-1);
+  }
+
+  .cta__inner > p {
+    font-size: var(--text-lg);
+    color: var(--color-text-2);
+    max-width: 36rem;
+  }
+
+  /* ── Botones ── */
+  .btn {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-xl);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-1);
+    background-color: var(--color-surface-1);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .btn--primary {
+    background-color: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+
+  .btn--primary:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .quienes__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .proxima__card {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .noticias__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

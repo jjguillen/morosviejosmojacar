@@ -1,0 +1,72 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = 'Moros Viejos — Kabila Alí-Cuquei',
+  description = 'Kabila Moros Viejos "Alí-Cuquei" de las Fiestas de Moros y Cristianos de Mojácar. "Sin vencidos ni vencedores".',
+  ogImage = '/og-default.jpg',
+} = Astro.props;
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const fullTitle = title.includes('Moros Viejos') ? title : `${title} — Moros Viejos`;
+---
+
+<!doctype html>
+<html lang="es" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL(ogImage, Astro.url).href} />
+    <meta property="og:locale" content="es_ES" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<script is:inline>
+  (function () {
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = stored || (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+
+  btn?.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
+
+<style is:global>
+  @import '../styles/tokens.css';
+  @import '../styles/base.css';
+</style>

@@ -1,0 +1,76 @@
+/* ─── Google Fonts ─── */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
+
+/* ─── Design Tokens ─── */
+:root {
+  /* ── Colores: modo claro ── */
+  --color-surface-1: #fcf9f3;
+  --color-surface-2: #f5efe5;
+  --color-surface-3: #ede4d8;
+  --color-text-1: #2c2416;
+  --color-text-2: #5c4f3f;
+  --color-text-3: #8a7e6f;
+  --color-accent: #32783a;
+  --color-accent-hover: #3d8f47;
+  --color-accent-2: #c5a44c;
+  --color-accent-2-hover: #d4b85e;
+  --color-border: #d9cebf;
+
+  /* ── Tipografía ── */
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Source Sans 3', sans-serif;
+
+  /* ── Escala tipográfica ── */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+
+  /* ── Espaciado ── */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* ── Bordes y radios ── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* ── Sombras ── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* ── Layout ── */
+  --max-width: 72rem;
+  --header-height: 4rem;
+}
+
+/* ── Modo oscuro ── */
+[data-theme='dark'] {
+  --color-surface-1: #1a1510;
+  --color-surface-2: #221c15;
+  --color-surface-3: #2e271f;
+  --color-text-1: #f0ebe3;
+  --color-text-2: #b8ad9c;
+  --color-text-3: #7a7062;
+  --color-accent: #4aaf5c;
+  --color-accent-hover: #5cc470;
+  --color-accent-2: #d4b65c;
+  --color-accent-2-hover: #e0c470;
+  --color-border: #3a3229;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+}

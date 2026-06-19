@@ -1,0 +1,132 @@
+---
+export interface Props {
+  image: string;
+  imageAlt: string;
+}
+
+const { image, imageAlt } = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero__bg" role="img" aria-label={imageAlt} style={`background-image: url(${image})`}>
+    <div class="hero__overlay"></div>
+  </div>
+  <div class="hero__content container">
+    <h1 class="hero__title">
+      <span class="hero__title-ar">موروس بيخوس</span>
+      <span class="hero__title-es">Moros Viejos</span>
+    </h1>
+    <p class="hero__subtitle">Kabila Alí-Cuquei</p>
+    <p class="hero__motto">&ldquo;Sin vencidos ni vencedores&rdquo;</p>
+    <p class="hero__since">Desde 1988</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    overflow: hidden;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(44, 36, 22, 0.6) 0%,
+      rgba(44, 36, 22, 0.5) 50%,
+      var(--color-surface-1) 100%
+    );
+  }
+
+  :global([data-theme='dark']) .hero__overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(26, 21, 16, 0.7) 0%,
+      rgba(26, 21, 16, 0.6) 50%,
+      var(--color-surface-1) 100%
+    );
+  }
+
+  .hero__content {
+    position: relative;
+    text-align: center;
+    padding-top: var(--space-3xl);
+    padding-bottom: var(--space-4xl);
+  }
+
+  .hero__title {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .hero__title-ar {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    color: var(--color-accent-2);
+    letter-spacing: 0.08em;
+  }
+
+  .hero__title-es {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, var(--text-6xl));
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero__subtitle {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-top: var(--space-sm);
+  }
+
+  .hero__motto {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: var(--space-lg);
+  }
+
+  .hero__since {
+    display: inline-block;
+    margin-top: var(--space-xl);
+    padding: var(--space-xs) var(--space-lg);
+    border: 1px solid var(--color-accent-2);
+    color: var(--color-accent-2);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      min-height: 60vh;
+    }
+
+    .hero__title-ar {
+      font-size: var(--text-2xl);
+    }
+  }
+</style>

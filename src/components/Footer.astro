@@ -1,0 +1,97 @@
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="footer__name">Moros Viejos</span>
+      <span class="footer__sub">Kabila Alí-Cuquei &mdash; Mojácar</span>
+    </div>
+
+    <nav class="footer__nav" aria-label="Navegación secundaria">
+      <a href="/historia">Historia</a>
+      <a href="/galeria">Galería</a>
+      <a href="/noticias">Noticias</a>
+      <a href="/unete">Únete</a>
+    </nav>
+
+    <div class="footer__info">
+      <p>Plaza del Parterre, Mojácar (Almería)</p>
+      <p class="footer__motto">&ldquo;Sin vencidos ni vencedores&rdquo;</p>
+    </div>
+
+    <p class="footer__copy">
+      &copy; {new Date().getFullYear()} Kabila Moros Viejos Alí-Cuquei
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-surface-2);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-3xl) 0 var(--space-xl);
+    margin-top: var(--space-4xl);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .footer__inner {
+    text-align: center;
+  }
+
+  .footer__brand {
+    margin-bottom: var(--space-xl);
+  }
+
+  .footer__name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-text-1);
+  }
+
+  .footer__sub {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: var(--space-xs);
+  }
+
+  .footer__nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .footer__nav a {
+    font-size: var(--text-sm);
+    color: var(--color-text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease;
+  }
+
+  .footer__nav a:hover {
+    color: var(--color-accent);
+  }
+
+  .footer__info {
+    color: var(--color-text-3);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .footer__motto {
+    font-style: italic;
+    margin-top: var(--space-xs);
+  }
+
+  .footer__copy {
+    font-size: var(--text-xs);
+    color: var(--color-text-3);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+</style>

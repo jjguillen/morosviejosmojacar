@@ -1,0 +1,318 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Únete" description="Forma parte de la Kabila Moros Viejos Alí-Cuquei. Infórmate sobre cómo unirte a nuestra agrupación en Mojácar.">
+  <div class="page">
+    <header class="page-header">
+      <div class="container">
+        <h1 class="page-title">&Uacute;nete a la Kabila</h1>
+        <p class="page-subtitle">
+          &iquest;Te gustan las fiestas, la tradici&oacute;n y el buen ambiente?
+          La Kabila Moros Viejos te espera.
+        </p>
+      </div>
+    </header>
+
+    <div class="container unete__grid">
+      <div class="unete__info">
+        <section class="unete__section">
+          <h2>Por qu&eacute; unirte</h2>
+          <p>
+            Formar parte de los Moros Viejos es mucho m&aacute;s que desfilar un domingo de junio.
+            Es pertenecer a una familia que comparte la pasi&oacute;n por nuestras tradiciones,
+            nuestra historia y nuestro pueblo.
+          </p>
+          <ul class="unete__list">
+            <li>Participa en el Gran Desfile y en todas las actividades festeras</li>
+            <li>Disfruta de cenas, reuniones y convivencias durante todo el a&ntilde;o</li>
+            <li>Contribuye a preservar las tradiciones de Moj&aacute;car</li>
+            <li>Forma parte de una de las kabilas fundadoras de las fiestas</li>
+          </ul>
+        </section>
+
+        <section class="unete__section">
+          <h2>C&oacute;mo unirte</h2>
+          <ol class="unete__steps">
+            <li>
+              <strong>Ven a conocernos</strong> &mdash; P&aacute;sate por nuestra sede en la
+              Plaza del Parterre cualquier viernes por la tarde. Estaremos encantados de
+              recibirte.
+            </li>
+            <li>
+              <strong>Rellena la solicitud</strong> &mdash; Te facilitaremos el formulario
+              de inscripci&oacute;n y te explicaremos las cuotas y condiciones.
+            </li>
+            <li>
+              <strong>&iexcl;A disfrutar!</strong> &mdash; Una vez inscrito, ya eres parte de
+              la kabila. Recibir&aacute;s tu traje y podr&aacute;s participar en todas las
+              actividades.
+            </li>
+          </ol>
+        </section>
+
+        <section class="unete__section">
+          <h2>Nuestra sede</h2>
+          <div class="unete__sede">
+            <address>
+              <strong>Plaza del Parterre</strong><br />
+              Junto a la Iglesia de Santa Mar&iacute;a<br />
+              04638 Moj&aacute;car, Almer&iacute;a
+            </address>
+            <p class="unete__horario">
+              Reuniones todos los viernes a partir de las 19:00
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <aside class="unete__form-wrap">
+        <h2>Contacta con nosotros</h2>
+        <form
+          class="unete__form"
+          action="https://formspree.io/f/example"
+          method="POST"
+        >
+          <div class="form-field">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-field">
+            <label for="email">Correo electr&oacute;nico</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-field">
+            <label for="message">Mensaje</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full">
+            Enviar mensaje
+          </button>
+        </form>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    padding: var(--space-4xl) 0 var(--space-3xl);
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    color: var(--color-text-1);
+    margin-bottom: var(--space-md);
+  }
+
+  .page-subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-2);
+    max-width: 36rem;
+    margin: 0 auto;
+  }
+
+  .unete__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3xl);
+    padding-bottom: var(--space-4xl);
+  }
+
+  .unete__section {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .unete__section h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-accent);
+    margin-bottom: var(--space-md);
+  }
+
+  .unete__section p {
+    color: var(--color-text-2);
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
+  }
+
+  .unete__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .unete__list li {
+    padding-left: var(--space-lg);
+    position: relative;
+    color: var(--color-text-2);
+    font-size: var(--text-sm);
+  }
+
+  .unete__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-accent-2);
+    border-radius: 50%;
+  }
+
+  .unete__steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    counter-reset: step;
+    padding-left: 0;
+  }
+
+  .unete__steps li {
+    position: relative;
+    padding-left: 3rem;
+    color: var(--color-text-2);
+    line-height: 1.6;
+  }
+
+  .unete__steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .unete__sede {
+    background-color: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+  }
+
+  .unete__sede address {
+    font-style: normal;
+    color: var(--color-text-2);
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+  }
+
+  .unete__sede address strong {
+    color: var(--color-text-1);
+  }
+
+  .unete__horario {
+    font-size: var(--text-sm);
+    color: var(--color-accent-2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Formulario ── */
+  .unete__form-wrap {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-xl));
+    align-self: start;
+  }
+
+  .unete__form-wrap h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-text-1);
+    margin-bottom: var(--space-lg);
+  }
+
+  .unete__form {
+    background-color: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+  }
+
+  .form-field {
+    margin-bottom: var(--space-md);
+  }
+
+  .form-field label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-2);
+    margin-bottom: var(--space-xs);
+  }
+
+  .form-field input,
+  .form-field textarea {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-base);
+    color: var(--color-text-1);
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s ease;
+  }
+
+  .form-field input:focus,
+  .form-field textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-xl);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .btn--primary {
+    background-color: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+
+  .btn--primary:hover {
+    background-color: var(--color-accent-hover);
+  }
+
+  .btn--full {
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: var(--text-3xl);
+    }
+
+    .unete__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .unete__form-wrap {
+      position: static;
+    }
+  }
+</style>

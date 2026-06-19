@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsCard from '../../components/NewsCard.astro';
+
+const noticias = await getCollection('noticias', ({ data }) => !data.draft);
+noticias.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Noticias">
+  <div class="page">
+    <header class="page-header">
+      <div class="container">
+        <h1 class="page-title">Noticias</h1>
+        <p class="page-subtitle">
+          Actualidad de la Kabila Moros Viejos y de las Fiestas de Moros y Cristianos de Moj&aacute;car
+        </p>
+      </div>
+    </header>
+
+    <div class="container">
+      {noticias.length > 0 ? (
+        <div class="noticias__grid">
+          {noticias.map((entry) => (
+            <NewsCard entry={entry} />
+          ))}
+        </div>
+      ) : (
+        <p class="noticias__empty">A&uacute;n no hay noticias publicadas. &iexcl;Vuelve pronto!</p>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+    padding: var(--space-4xl) 0 var(--space-3xl);
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    color: var(--color-text-1);
+    margin-bottom: var(--space-md);
+  }
+
+  .page-subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-2);
+    max-width: 36rem;
+    margin: 0 auto;
+  }
+
+  .noticias__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--space-xl);
+    padding-bottom: var(--space-4xl);
+  }
+
+  .noticias__empty {
+    text-align: center;
+    color: var(--color-text-3);
+    font-size: var(--text-lg);
+    padding: var(--space-4xl) 0;
+  }
+
+  @media (max-width: 768px) {
+    .page-title {
+      font-size: var(--text-3xl);
+    }
+
+    .noticias__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
