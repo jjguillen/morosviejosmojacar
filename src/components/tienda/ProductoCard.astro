@@ -11,60 +11,55 @@ const { id, nombre, descripcion, precio, tallas } = producto.data;
 
 <article class="producto-card" data-producto-id={id}>
   <div class="producto-card__img" aria-hidden="true">
-    <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-      <rect width="56" height="56" rx="10" fill="var(--color-accent)" opacity="0.12"/>
-      <path d="M18 32h20l-5-12H23l-5 12z" stroke="var(--color-accent)" stroke-width="1.5" fill="none"/>
-      <circle cx="23" cy="34" r="2.5" fill="var(--color-accent)" opacity="0.6"/>
-      <circle cx="33" cy="34" r="2.5" fill="var(--color-accent)" opacity="0.6"/>
+    <svg viewBox="0 0 80 80" fill="none">
+      <rect width="80" height="80" rx="16" fill="var(--color-accent)" opacity="0.08"/>
+      <path d="M24 48h32l-8-18H32l-8 18z" stroke="var(--color-accent)" stroke-width="2" fill="none"/>
+      <circle cx="30" cy="52" r="3.5" fill="var(--color-accent)" opacity="0.5"/>
+      <circle cx="50" cy="52" r="3.5" fill="var(--color-accent)" opacity="0.5"/>
     </svg>
   </div>
+
   <div class="producto-card__body">
     <h3 class="producto-card__name">{nombre}</h3>
     {descripcion && <p class="producto-card__desc">{descripcion}</p>}
     <span class="producto-card__price">{precio} €</span>
 
-    {tallas ? (
-      <div class="producto-card__controls">
-        <select class="producto-card__talla" name={`talla-${id}`} aria-label="Talla" required>
+    <div class="producto-card__controls">
+      {tallas ? (
+        <select class="producto-card__talla" name={`talla-${id}`} aria-label="Talla">
           <option value="">Talla</option>
           {tallas.map((t) => <option value={t}>{t}</option>)}
         </select>
-        <div class="producto-card__qty-row">
-          <input
-            type="number"
-            class="producto-card__qty"
-            name={`qty-${id}`}
-            min="1"
-            max="20"
-            value="1"
-            aria-label="Cantidad"
-          />
-          <button type="button" class="btn btn--add producto-card__add" data-add={id}>
-            Añadir
-          </button>
-        </div>
+      ) : (
+        <span class="producto-card__no-talla">Sin talla</span>
+      )}
+      <div class="producto-card__qty-row">
+        <input
+          type="number"
+          class="producto-card__qty"
+          name={`qty-${id}`}
+          min="1"
+          max="20"
+          value="1"
+          aria-label="Cantidad"
+        />
+        <button type="button" class="btn btn--add producto-card__add" data-add={id}>
+          A&ntilde;adir
+        </button>
       </div>
-    ) : (
-      <div class="producto-card__controls">
-        <div class="producto-card__qty-row producto-card__qty-row--no-talla">
-          <span class="producto-card__no-talla">Sin talla</span>
-          <button type="button" class="btn btn--add producto-card__add" data-add={id}>
-            Añadir ×1
-          </button>
-        </div>
-      </div>
-    )}
+    </div>
   </div>
 </article>
 
 <style>
   .producto-card {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
-    padding: var(--space-lg);
     background-color: var(--color-surface-2);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
+    overflow: hidden;
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
   }
 
@@ -73,21 +68,26 @@ const { id, nombre, descripcion, precio, tallas } = producto.data;
   }
 
   .producto-card__img {
-    flex-shrink: 0;
-    width: 72px;
-    height: 72px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-sm);
     background-color: var(--color-surface-1);
+    padding: var(--space-lg);
+    min-height: 160px;
+  }
+
+  .producto-card__img svg {
+    width: 100%;
+    height: 100%;
+    max-width: 120px;
+    max-height: 120px;
   }
 
   .producto-card__body {
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
-    flex: 1;
+    padding: var(--space-lg) var(--space-lg) var(--space-lg) 0;
     min-width: 0;
   }
 
@@ -115,7 +115,7 @@ const { id, nombre, descripcion, precio, tallas } = producto.data;
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
-    margin-top: var(--space-sm);
+    margin-top: auto;
   }
 
   .producto-card__talla {
@@ -133,14 +133,17 @@ const { id, nombre, descripcion, precio, tallas } = producto.data;
     border-color: var(--color-accent);
   }
 
+  .producto-card__no-talla {
+    font-size: var(--text-xs);
+    color: var(--color-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   .producto-card__qty-row {
     display: flex;
     gap: var(--space-sm);
     align-items: center;
-  }
-
-  .producto-card__qty-row--no-talla {
-    justify-content: space-between;
   }
 
   .producto-card__qty {
@@ -157,13 +160,6 @@ const { id, nombre, descripcion, precio, tallas } = producto.data;
   .producto-card__qty:focus {
     outline: none;
     border-color: var(--color-accent);
-  }
-
-  .producto-card__no-talla {
-    font-size: var(--text-xs);
-    color: var(--color-text-3);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
 
   .btn--add {
@@ -183,5 +179,16 @@ const { id, nombre, descripcion, precio, tallas } = producto.data;
 
   .btn--add:hover {
     background-color: var(--color-accent-hover);
+  }
+
+  @media (max-width: 768px) {
+    .producto-card {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .producto-card__img svg {
+      max-width: 80px;
+      max-height: 80px;
+    }
   }
 </style>

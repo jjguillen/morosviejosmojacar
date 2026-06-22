@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import CarritoTienda from '../components/tienda/CarritoTienda.astro';
 
 const productos = await getCollection('productos', ({ data }) => data.activo);
@@ -17,15 +18,10 @@ const porCategoria = {
   description="Adquiere los productos oficiales de la Kabila Alí-Cuquei. Camisetas, polos, sudaderas, gorros, bolsos, pins y chilabas."
 >
   <div class="page">
-    <header class="page-header">
-      <div class="container">
-        <h1 class="page-title">Tienda oficial</h1>
-        <p class="page-subtitle">
-          Selecciona los productos, elige talla y cantidad. Una vez enviado el pedido,
-          nos pondremos en contacto contigo para cerrar los detalles.
-        </p>
-      </div>
-    </header>
+    <PageHeader
+      title="Tienda oficial"
+      subtitle="Selecciona los productos, elige talla y cantidad. Una vez enviado el pedido, nos pondremos en contacto contigo para cerrar los detalles."
+    />
 
     <div class="container">
       <CarritoTienda productos={productos} />
@@ -33,30 +29,4 @@ const porCategoria = {
   </div>
 </BaseLayout>
 
-<style>
-  .page-header {
-    text-align: center;
-    padding: var(--space-4xl) 0 var(--space-3xl);
-  }
-
-  .page-title {
-    font-family: var(--font-display);
-    font-size: var(--text-5xl);
-    color: var(--color-text-1);
-    margin-bottom: var(--space-md);
-  }
-
-  .page-subtitle {
-    font-size: var(--text-lg);
-    color: var(--color-text-2);
-    max-width: 36rem;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    .page-title {
-      font-size: var(--text-3xl);
-    }
-  }
 </style>

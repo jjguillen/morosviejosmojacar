@@ -1,18 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 ---
 
 <BaseLayout title="Únete" description="Forma parte de la Kabila Moros Viejos Alí-Cuquei. Infórmate sobre cómo unirte a nuestra agrupación en Mojácar.">
   <div class="page">
-    <header class="page-header">
-      <div class="container">
-        <h1 class="page-title">&Uacute;nete a la Kabila</h1>
-        <p class="page-subtitle">
-          &iquest;Te gustan las fiestas, la tradici&oacute;n y el buen ambiente?
-          La Kabila Moros Viejos te espera.
-        </p>
-      </div>
-    </header>
+    <PageHeader
+      title="Únete a la Kabila"
+      subtitle="¿Te gustan las fiestas, la tradición y el buen ambiente? La Kabila Moros Viejos te espera."
+    />
 
     <div class="container unete__grid">
       <div class="unete__info">
@@ -95,25 +91,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style>
-  .page-header {
-    text-align: center;
-    padding: var(--space-4xl) 0 var(--space-3xl);
-  }
-
-  .page-title {
-    font-family: var(--font-display);
-    font-size: var(--text-5xl);
-    color: var(--color-text-1);
-    margin-bottom: var(--space-md);
-  }
-
-  .page-subtitle {
-    font-size: var(--text-lg);
-    color: var(--color-text-2);
-    max-width: 36rem;
-    margin: 0 auto;
-  }
-
   .unete__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -274,39 +251,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     border-color: var(--color-accent);
   }
 
-  .btn {
-    display: inline-block;
-    padding: var(--space-sm) var(--space-xl);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  .btn--primary {
-    background-color: var(--color-accent);
-    color: #fff;
-    border-color: var(--color-accent);
-  }
-
-  .btn--primary:hover {
-    background-color: var(--color-accent-hover);
-  }
-
-  .btn--full {
-    width: 100%;
-    text-align: center;
-  }
-
   @media (max-width: 768px) {
-    .page-title {
-      font-size: var(--text-3xl);
-    }
-
     .unete__grid {
       grid-template-columns: 1fr;
     }

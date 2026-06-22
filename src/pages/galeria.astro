@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import GalleryGrid from '../components/GalleryGrid.astro';
 import PhotoFilter from '../components/PhotoFilter.astro';
 
@@ -13,14 +14,10 @@ const selectedYear = years[0] ?? 0;
 
 <BaseLayout title="Galería">
   <div class="page">
-    <header class="page-header">
-      <div class="container">
-        <h1 class="page-title">Galer&iacute;a</h1>
-        <p class="page-subtitle">
-          Im&aacute;genes de nuestros desfiles, actividades y momentos inolvidables
-        </p>
-      </div>
-    </header>
+    <PageHeader
+      title="Galería"
+      subtitle="Imágenes de nuestros desfiles, actividades y momentos inolvidables"
+    />
 
     <div class="container">
       {galerias.length > 0 ? (
@@ -48,25 +45,6 @@ const selectedYear = years[0] ?? 0;
 </BaseLayout>
 
 <style>
-  .page-header {
-    text-align: center;
-    padding: var(--space-4xl) 0 var(--space-3xl);
-  }
-
-  .page-title {
-    font-family: var(--font-display);
-    font-size: var(--text-5xl);
-    color: var(--color-text-1);
-    margin-bottom: var(--space-md);
-  }
-
-  .page-subtitle {
-    font-size: var(--text-lg);
-    color: var(--color-text-2);
-    max-width: 36rem;
-    margin: 0 auto;
-  }
-
   .section__year {
     font-family: var(--font-display);
     font-size: var(--text-2xl);
@@ -82,9 +60,4 @@ const selectedYear = years[0] ?? 0;
     padding: var(--space-4xl) 0;
   }
 
-  @media (max-width: 768px) {
-    .page-title {
-      font-size: var(--text-3xl);
-    }
-  }
 </style>

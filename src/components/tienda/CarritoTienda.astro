@@ -86,67 +86,12 @@ const porCategoria = categorias
       <div id="formulario-container"></div>
     </aside>
   </div>
-
-  <!-- Móvil: barra inferior -->
-  <div class="pedido-barra-movil" id="pedido-barra-movil">
-    <div class="pedido-barra-movil__info">
-      <span class="pedido-barra-movil__items" id="barra-items">0 productos</span>
-      <span class="pedido-barra-movil__total" id="barra-total">0,00 €</span>
-    </div>
-    <button type="button" class="btn btn--outline btn--sm" data-abrir-pedido>Ver pedido</button>
-  </div>
-
-  <!-- Móvil: overlay -->
-  <div class="pedido-overlay" id="pedido-overlay"></div>
-
-  <!-- Móvil: drawer -->
-  <div class="pedido-drawer" id="pedido-drawer" role="dialog" aria-label="Resumen del pedido">
-    <div class="pedido-drawer__handle"></div>
-    <h3 class="pedido-drawer__titulo">Tu pedido</h3>
-
-    <div class="carrito-vacio" id="drawer-vacio">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-      </svg>
-      <p>Tu pedido está vacío</p>
-      <span>Añade productos del catálogo</span>
-    </div>
-
-    <div class="pedido-tabla-wrapper" id="drawer-tabla-wrapper" hidden>
-      <table class="pedido-tabla" aria-label="Resumen del pedido">
-        <thead>
-          <tr>
-            <th scope="col" class="col-nombre">Producto</th>
-            <th scope="col" class="col-cantidad">Cant.</th>
-            <th scope="col" class="col-precio">Precio</th>
-            <th scope="col" class="col-accion"></th>
-          </tr>
-        </thead>
-        <tbody id="drawer-lineas" aria-live="polite"></tbody>
-        <tfoot>
-          <tr class="pedido-total-row">
-            <td colspan="2" class="pedido-total-label">Total</td>
-            <td class="pedido-total-valor" id="drawer-total">0,00 €</td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-
-    <div class="pedido-acciones" id="drawer-acciones" hidden>
-      <button type="button" class="btn btn--outline btn--sm" id="drawer-vaciar">Vaciar pedido</button>
-      <button type="button" class="btn btn--primary btn--full" id="drawer-finalizar" disabled>Finalizar pedido</button>
-    </div>
-
-    <div id="drawer-form-container"></div>
-  </div>
 </div>
 
 <style>
   .tienda-layout {
     display: grid;
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-2xl);
     align-items: start;
     padding-block: var(--space-2xl);
@@ -283,42 +228,66 @@ const porCategoria = categorias
     padding: 1px var(--space-sm);
   }
 
-  .cantidad-control {
-    display: flex;
+  /* Controles inyectados por JS — :global para que apliquen los estilos scoped */
+  :global(.cantidad-control) {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-xs);
+    gap: 0;
   }
 
-  .btn-cantidad {
-    display: flex;
+  :global(.icon-btn) {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    font-size: var(--text-base);
-    line-height: 1;
-    color: var(--color-text-3);
-    background-color: var(--color-surface-2);
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
     padding: 0;
-    min-width: 32px;
-    min-height: 32px;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    margin: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-accent);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  .btn-cantidad:hover {
-    background-color: var(--color-accent);
-    color: #fff;
+  :global(.icon-btn svg) {
+    display: block;
+    pointer-events: none;
   }
 
-  .cantidad-valor {
-    font-weight: 700;
-    color: var(--color-text-2);
-    min-width: 1.5ch;
+  :global(.icon-btn:hover) {
+    background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  }
+
+  :global(.icon-btn:active) {
+    background-color: color-mix(in srgb, var(--color-accent) 24%, transparent);
+  }
+
+  :global(.icon-btn:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  :global(.icon-btn--eliminar) {
+    color: var(--color-text-3);
+  }
+
+  :global(.icon-btn--eliminar:hover) {
+    color: var(--color-accent);
+    background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  }
+
+  :global(.cantidad-valor) {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text-1);
+    min-width: 1.75ch;
     text-align: center;
+    user-select: none;
   }
 
   .pedido-tabla .col-precio {
@@ -328,27 +297,8 @@ const porCategoria = categorias
     white-space: nowrap;
   }
 
-  .btn-eliminar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    min-width: 32px;
-    min-height: 32px;
-    color: var(--color-text-3);
-    background: none;
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    padding: 0;
+  .pedido-tabla .col-accion :global(.icon-btn) {
     margin: 0 auto;
-    transition: color 0.2s ease, background-color 0.2s ease;
-  }
-
-  .btn-eliminar:hover {
-    color: var(--color-accent);
-    background-color: var(--color-surface-2);
   }
 
   /* ── Fila del total ── */
@@ -386,32 +336,7 @@ const porCategoria = categorias
 
   .pedido-acciones[hidden] { display: none; }
 
-  .btn {
-    display: inline-block;
-    padding: var(--space-sm) var(--space-xl);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    background: none;
-    color: var(--color-text-1);
-    text-align: center;
-  }
-
-  .btn--primary {
-    background-color: var(--color-accent);
-    color: #fff;
-    border-color: var(--color-accent);
-  }
-
-  .btn--primary:hover { background-color: var(--color-accent-hover); }
   .btn--primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .btn--full { width: 100%; }
 
   .btn--outline {
     background: none;
@@ -433,110 +358,18 @@ const porCategoria = categorias
     border-width: 0;
   }
 
-  /* ── Móvil ── */
-  .pedido-barra-movil {
-    display: none;
-  }
-
-  .pedido-drawer {
-    display: none;
-  }
-
-  .pedido-overlay {
-    display: none;
-  }
-
   @media (max-width: 768px) {
     .tienda-layout {
       grid-template-columns: 1fr;
-      padding-bottom: 80px;
     }
 
-    .pedido-panel { display: none; }
-
-    .pedido-barra-movil {
-      display: flex;
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--space-md) var(--space-lg);
-      background-color: var(--color-surface-1);
-      border-top: 1px solid var(--color-border);
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
-      z-index: 90;
-    }
-
-    .pedido-barra-movil__info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pedido-barra-movil__total {
-      font-family: var(--font-display);
-      font-size: var(--text-base);
-      font-weight: 700;
-      color: var(--color-text-1);
-    }
-
-    .pedido-barra-movil__items {
-      font-size: var(--text-xs);
-      color: var(--color-text-3);
-    }
-
-    .pedido-drawer {
-      display: block;
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      max-height: 85vh;
-      background-color: var(--color-surface-1);
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
-      z-index: 100;
-      padding: var(--space-xl);
-      overflow-y: auto;
-      transform: translateY(100%);
-      transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .pedido-drawer.abierto { transform: translateY(0); }
-
-    .pedido-drawer__handle {
-      width: 36px;
-      height: 4px;
-      background-color: var(--color-border);
-      border-radius: 999px;
-      margin: 0 auto var(--space-lg);
-    }
-
-    .pedido-drawer__titulo {
-      font-family: var(--font-display);
-      font-size: var(--text-lg);
-      font-weight: 600;
-      color: var(--color-text-1);
-      margin-bottom: var(--space-lg);
-    }
-
-    .pedido-overlay {
-      display: block;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      z-index: 99;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 350ms ease;
-    }
-
-    .pedido-overlay.visible {
-      opacity: 1;
-      pointer-events: auto;
+    .pedido-panel {
+      position: static;
     }
 
     .pedido-tabla .col-cantidad { width: 90px; }
     .pedido-tabla .col-precio { width: 64px; }
 
-    .cantidad-control { gap: var(--space-xs); }
   }
 </style>
 
@@ -556,10 +389,6 @@ const porCategoria = categorias
 
   function calcularTotal(): number {
     return carrito.reduce((sum, l) => sum + l.precioUnit * l.cantidad, 0);
-  }
-
-  function contarItems(): number {
-    return carrito.reduce((sum, l) => sum + l.cantidad, 0);
   }
 
   function generarResumenTexto(): string {
@@ -583,15 +412,19 @@ const porCategoria = categorias
         </td>
         <td class="col-cantidad">
           <div class="cantidad-control">
-            <button class="btn-cantidad" data-accion="restar" data-idx="${i}" aria-label="Reducir cantidad de ${l.nombre}">−</button>
+            <button type="button" class="icon-btn icon-btn--cantidad" data-accion="restar" data-idx="${i}" aria-label="Reducir cantidad de ${l.nombre}">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
             <span class="cantidad-valor">${l.cantidad}</span>
-            <button class="btn-cantidad" data-accion="sumar" data-idx="${i}" aria-label="Aumentar cantidad de ${l.nombre}">+</button>
+            <button type="button" class="icon-btn icon-btn--cantidad" data-accion="sumar" data-idx="${i}" aria-label="Aumentar cantidad de ${l.nombre}">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
           </div>
         </td>
         <td class="col-precio">${formatEur(subtotal)}</td>
         <td class="col-accion">
-          <button class="btn-eliminar" data-eliminar="${i}" aria-label="Eliminar ${l.nombre}">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          <button type="button" class="icon-btn icon-btn--eliminar" data-eliminar="${i}" aria-label="Eliminar ${l.nombre}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3h6l1 2h4v2H4V5h4l1-2z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M7 9v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M10 12v6M14 12v6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
           </button>
         </td>
       </tr>`;
@@ -601,10 +434,8 @@ const porCategoria = categorias
 
   function renderizarCarrito() {
     const total = calcularTotal();
-    const items = contarItems();
     const vacio = carrito.length === 0;
 
-    // Desktop
     const tablaW = document.getElementById('pedido-tabla-wrapper')!;
     const tbody = document.getElementById('pedido-lineas')!;
     const totalEl = document.getElementById('pedido-total')!;
@@ -612,45 +443,23 @@ const porCategoria = categorias
     const accionesEl = document.getElementById('pedido-acciones')!;
     const finalizarBtn = document.getElementById('pedido-finalizar') as HTMLButtonElement;
 
-    // Móvil
-    const barraTotal = document.getElementById('barra-total')!;
-    const barraItems = document.getElementById('barra-items')!;
-    const dTablaW = document.getElementById('drawer-tabla-wrapper')!;
-    const dTbody = document.getElementById('drawer-lineas')!;
-    const dTotalEl = document.getElementById('drawer-total')!;
-    const dVacioEl = document.getElementById('drawer-vacio')!;
-    const dAccionesEl = document.getElementById('drawer-acciones')!;
-    const dFinalizarBtn = document.getElementById('drawer-finalizar') as HTMLButtonElement;
-
-    // Total común
     const totalStr = formatEur(total);
 
-    // Desktop
     totalEl.textContent = totalStr;
-    barraTotal.textContent = totalStr;
-    barraItems.textContent = `${items} producto${items !== 1 ? 's' : ''}`;
     finalizarBtn.disabled = vacio;
-    dFinalizarBtn.disabled = vacio;
 
     if (vacio) {
       tablaW.setAttribute('hidden', '');
       accionesEl.setAttribute('hidden', '');
       vacioEl.removeAttribute('hidden');
-      dTablaW.setAttribute('hidden', '');
-      dAccionesEl.setAttribute('hidden', '');
-      dVacioEl.removeAttribute('hidden');
       cerrarFormulario();
     } else {
       vacioEl.setAttribute('hidden', '');
       tablaW.removeAttribute('hidden');
       accionesEl.removeAttribute('hidden');
-      dVacioEl.setAttribute('hidden', '');
-      dTablaW.removeAttribute('hidden');
-      dAccionesEl.removeAttribute('hidden');
 
       const filas = carrito.map((l, i) => filaHTML(l, i)).join('');
       tbody.innerHTML = filas;
-      dTbody.innerHTML = filas;
     }
   }
 
@@ -658,8 +467,6 @@ const porCategoria = categorias
     formularioVisible = false;
     const c1 = document.getElementById('formulario-container');
     if (c1) c1.innerHTML = '';
-    const c2 = document.getElementById('drawer-form-container');
-    if (c2) c2.innerHTML = '';
   }
 
   // ── Formulario ──
@@ -806,7 +613,7 @@ const porCategoria = categorias
     tbody?.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       // +/−
-      const ctlBtn = target.closest<HTMLButtonElement>('.btn-cantidad');
+      const ctlBtn = target.closest<HTMLButtonElement>('.icon-btn--cantidad');
       if (ctlBtn) {
         const accion = ctlBtn.dataset.accion;
         const idx = parseInt(ctlBtn.dataset.idx || '');
@@ -822,7 +629,7 @@ const porCategoria = categorias
         return;
       }
       // Eliminar
-      const delBtn = target.closest<HTMLButtonElement>('.btn-eliminar');
+      const delBtn = target.closest<HTMLButtonElement>('.icon-btn--eliminar');
       if (delBtn) {
         const idx = parseInt(delBtn.dataset.eliminar || '');
         if (idx >= 0 && idx < carrito.length) {
@@ -834,33 +641,10 @@ const porCategoria = categorias
   }
 
   attachTablaListeners('pedido-lineas');
-  attachTablaListeners('drawer-lineas');
 
   // Vaciar
   document.getElementById('pedido-vaciar')?.addEventListener('click', () => { carrito = []; renderizarCarrito(); });
-  document.getElementById('drawer-vaciar')?.addEventListener('click', () => { carrito = []; renderizarCarrito(); });
 
   // Finalizar
   document.getElementById('pedido-finalizar')?.addEventListener('click', () => mostrarFormulario('formulario-container'));
-  document.getElementById('drawer-finalizar')?.addEventListener('click', () => mostrarFormulario('drawer-form-container'));
-
-  // Móvil: drawer
-  const drawer = document.getElementById('pedido-drawer')!;
-  const overlay = document.getElementById('pedido-overlay')!;
-
-  function abrirDrawer() {
-    drawer.classList.add('abierto');
-    overlay.classList.add('visible');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function cerrarDrawer() {
-    drawer.classList.remove('abierto');
-    overlay.classList.remove('visible');
-    document.body.style.overflow = '';
-  }
-
-  document.querySelectorAll('[data-abrir-pedido]').forEach(b => b.addEventListener('click', abrirDrawer));
-  overlay.addEventListener('click', cerrarDrawer);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarDrawer(); });
 </script>
