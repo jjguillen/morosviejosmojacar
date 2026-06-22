@@ -23,7 +23,7 @@ const selectedYear = years[0] ?? 0;
       {galerias.length > 0 ? (
         <>
           {years.length > 1 && (
-            <PhotoFilter years={years} selectedYear={selectedYear} client:load />
+            <PhotoFilter years={years} selectedYear={selectedYear} />
           )}
           {galerias.map((galeria) => (
             <section

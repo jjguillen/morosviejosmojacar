@@ -1,9 +1,1 @@
-{
-  "id": "gorro",
-  "nombre": "Gorro Moros Viejos",
-  "descripcion": "Gorro bordado con el nombre de la kabila",
-  "precio": 12,
-  "categoria": "complementos",
-  "tallas": ["Talla única"],
-  "activo": true
-}
+{ "id": "gorro", "nombre": "Gorro Moros Viejos", "descripcion": "Gorro bordado con el nombre de la kabila", "precio": 12, "imagen": "/productos/gorro.svg", "categoria": "complementos", "tallas": ["Talla única"], "activo": true }

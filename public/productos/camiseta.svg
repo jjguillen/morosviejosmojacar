@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f5efe5"/>
+  <rect x="1" y="1" width="398" height="398" rx="3" fill="none" stroke="#d9cebf" stroke-width="2"/>
+  <!-- Camiseta -->
+  <path d="M140 130 L120 155 L150 165 L150 270 L250 270 L250 165 L280 155 L260 130 L230 145 C225 135 210 130 200 130 C190 130 175 135 170 145 Z" fill="none" stroke="#32783a" stroke-width="3" stroke-linejoin="round"/>
+  <text x="200" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5c4f3f" letter-spacing="2">CAMISETA</text>
+  <text x="200" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#8a7e6f">Moros Viejos</text>
+</svg>

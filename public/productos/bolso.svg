@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f5efe5"/>
+  <rect x="1" y="1" width="398" height="398" rx="3" fill="none" stroke="#d9cebf" stroke-width="2"/>
+  <!-- Bolso tote -->
+  <rect x="135" y="175" width="130" height="115" rx="6" fill="none" stroke="#32783a" stroke-width="3"/>
+  <!-- asas -->
+  <path d="M162 175 L162 148 Q200 138 238 148 L238 175" fill="none" stroke="#32783a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- detalle interior -->
+  <line x1="200" y1="175" x2="200" y2="290" stroke="#32783a" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <!-- bolsillo exterior -->
+  <rect x="168" y="210" width="64" height="45" rx="3" fill="none" stroke="#32783a" stroke-width="2"/>
+  <text x="200" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5c4f3f" letter-spacing="2">BOLSO</text>
+  <text x="200" y="345" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#8a7e6f">Moros Viejos</text>
+</svg>

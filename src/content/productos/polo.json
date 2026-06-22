@@ -1,9 +1,1 @@
-{
-  "id": "polo",
-  "nombre": "Polo Moros Viejos",
-  "descripcion": "Polo piqué con logo de la kabila",
-  "precio": 22,
-  "categoria": "ropa",
-  "tallas": ["XS", "S", "M", "L", "XL", "XXL"],
-  "activo": true
-}
+{ "id": "polo", "nombre": "Polo Moros Viejos", "descripcion": "Polo piqué con logo de la kabila", "precio": 22, "imagen": "/productos/polo.svg", "categoria": "ropa", "tallas": ["XS","S","M","L","XL","XXL"], "activo": true }

@@ -86,6 +86,77 @@ const porCategoria = categorias
       <div id="formulario-container"></div>
     </aside>
   </div>
+
+  <!-- ── Barra flotante móvil ── -->
+  <div class="barra-movil" id="barra-pedido-movil" aria-hidden="true">
+    <button type="button" class="barra-movil__btn" id="barra-abrir-drawer" aria-haspopup="dialog">
+      <svg class="barra-movil__icono" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <span class="barra-movil__texto">Ver pedido</span>
+      <span class="barra-movil__badge" id="barra-badge">0</span>
+    </button>
+    <span class="barra-movil__total" id="barra-total">0,00 €</span>
+  </div>
+
+  <!-- ── Overlay ── -->
+  <div class="drawer-overlay" id="drawer-overlay" aria-hidden="true"></div>
+
+  <!-- ── Drawer móvil ── -->
+  <div class="drawer" id="drawer-pedido" role="dialog" aria-modal="true" aria-label="Tu pedido" aria-hidden="true">
+    <div class="drawer__header">
+      <h3 class="drawer__titulo">Tu pedido</h3>
+      <button type="button" class="drawer__cerrar" id="drawer-cerrar" aria-label="Cerrar pedido">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer__body">
+      <!-- Estado vacío -->
+      <div class="carrito-vacio" id="carrito-vacio-movil">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <p>Tu pedido está vacío</p>
+        <span>Añade productos del catálogo</span>
+      </div>
+
+      <!-- Tabla del pedido -->
+      <div class="pedido-tabla-wrapper" id="pedido-tabla-wrapper-movil" hidden>
+        <table class="pedido-tabla" aria-label="Resumen del pedido">
+          <thead>
+            <tr>
+              <th scope="col" class="col-nombre">Producto</th>
+              <th scope="col" class="col-cantidad">Cant.</th>
+              <th scope="col" class="col-precio">Precio</th>
+              <th scope="col" class="col-accion"><span class="sr-only">Eliminar</span></th>
+            </tr>
+          </thead>
+          <tbody id="pedido-lineas-movil" aria-live="polite"></tbody>
+          <tfoot>
+            <tr class="pedido-total-row">
+              <td colspan="2" class="pedido-total-label">Total</td>
+              <td class="pedido-total-valor" id="pedido-total-movil">0,00 €</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Acciones -->
+      <div class="pedido-acciones" id="pedido-acciones-movil" hidden>
+        <button type="button" class="btn btn--outline btn--sm" id="pedido-vaciar-movil">Vaciar pedido</button>
+        <button type="button" class="btn btn--primary btn--full" id="pedido-finalizar-movil" disabled>Finalizar pedido</button>
+      </div>
+
+      <!-- Formulario -->
+      <div id="formulario-container-movil"></div>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -363,13 +434,177 @@ const porCategoria = categorias
       grid-template-columns: 1fr;
     }
 
+    /* Panel desktop oculto en móvil — lo sustituye el drawer */
     .pedido-panel {
-      position: static;
+      display: none;
     }
 
     .pedido-tabla .col-cantidad { width: 90px; }
     .pedido-tabla .col-precio { width: 64px; }
+  }
 
+  /* ── Barra flotante móvil ── */
+  .barra-movil {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .barra-movil {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background-color: var(--color-accent);
+      color: #fff;
+      padding: var(--space-md) var(--space-lg);
+      padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
+      box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.18);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .barra-movil.barra-movil--visible {
+      transform: translateY(0);
+    }
+
+    .barra-movil__btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: var(--text-base);
+      font-weight: 600;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .barra-movil__icono {
+      flex-shrink: 0;
+    }
+
+    .barra-movil__badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.4rem;
+      height: 1.4rem;
+      padding: 0 var(--space-xs);
+      background-color: #fff;
+      color: var(--color-accent);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      border-radius: 999px;
+      line-height: 1;
+    }
+
+    .barra-movil__total {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+    }
+  }
+
+  /* ── Overlay ── */
+  .drawer-overlay {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .drawer-overlay {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 201;
+      background-color: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .drawer-overlay.drawer-overlay--visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /* ── Drawer ── */
+  .drawer {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .drawer {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 202;
+      max-height: 85vh;
+      background-color: var(--color-surface-1);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.18);
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .drawer.drawer--open {
+      transform: translateY(0);
+    }
+
+    .drawer__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+
+    .drawer__titulo {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--color-text-1);
+    }
+
+    .drawer__cerrar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border: none;
+      border-radius: 50%;
+      background: var(--color-surface-2);
+      color: var(--color-text-2);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .drawer__cerrar:hover {
+      background-color: var(--color-surface-3);
+      color: var(--color-text-1);
+    }
+
+    .drawer__body {
+      overflow-y: auto;
+      padding: var(--space-lg);
+      flex: 1;
+      -webkit-overflow-scrolling: touch;
+    }
   }
 </style>
 
@@ -389,6 +624,10 @@ const porCategoria = categorias
 
   function calcularTotal(): number {
     return carrito.reduce((sum, l) => sum + l.precioUnit * l.cantidad, 0);
+  }
+
+  function calcularUnidades(): number {
+    return carrito.reduce((sum, l) => sum + l.cantidad, 0);
   }
 
   function generarResumenTexto(): string {
@@ -430,36 +669,102 @@ const porCategoria = categorias
       </tr>`;
   }
 
+  // ── Drawer (móvil) ──
+
+  function abrirDrawer() {
+    const drawer = document.getElementById('drawer-pedido');
+    const overlay = document.getElementById('drawer-overlay');
+    if (!drawer || !overlay) return;
+    drawer.classList.add('drawer--open');
+    drawer.removeAttribute('aria-hidden');
+    overlay.classList.add('drawer-overlay--visible');
+    overlay.removeAttribute('aria-hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function cerrarDrawer() {
+    const drawer = document.getElementById('drawer-pedido');
+    const overlay = document.getElementById('drawer-overlay');
+    if (!drawer || !overlay) return;
+    drawer.classList.remove('drawer--open');
+    drawer.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('drawer-overlay--visible');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
   // ── Render ──
 
   function renderizarCarrito() {
     const total = calcularTotal();
+    const unidades = calcularUnidades();
     const vacio = carrito.length === 0;
-
-    const tablaW = document.getElementById('pedido-tabla-wrapper')!;
-    const tbody = document.getElementById('pedido-lineas')!;
-    const totalEl = document.getElementById('pedido-total')!;
-    const vacioEl = document.getElementById('carrito-vacio')!;
-    const accionesEl = document.getElementById('pedido-acciones')!;
-    const finalizarBtn = document.getElementById('pedido-finalizar') as HTMLButtonElement;
-
     const totalStr = formatEur(total);
+    const filas = vacio ? '' : carrito.map((l, i) => filaHTML(l, i)).join('');
 
-    totalEl.textContent = totalStr;
-    finalizarBtn.disabled = vacio;
+    // ── Panel desktop ──
+    const tablaW = document.getElementById('pedido-tabla-wrapper');
+    const tbody = document.getElementById('pedido-lineas');
+    const totalEl = document.getElementById('pedido-total');
+    const vacioEl = document.getElementById('carrito-vacio');
+    const accionesEl = document.getElementById('pedido-acciones');
+    const finalizarBtn = document.getElementById('pedido-finalizar') as HTMLButtonElement | null;
+
+    if (totalEl) totalEl.textContent = totalStr;
+    if (finalizarBtn) finalizarBtn.disabled = vacio;
 
     if (vacio) {
-      tablaW.setAttribute('hidden', '');
-      accionesEl.setAttribute('hidden', '');
-      vacioEl.removeAttribute('hidden');
+      tablaW?.setAttribute('hidden', '');
+      accionesEl?.setAttribute('hidden', '');
+      vacioEl?.removeAttribute('hidden');
       cerrarFormulario();
     } else {
-      vacioEl.setAttribute('hidden', '');
-      tablaW.removeAttribute('hidden');
-      accionesEl.removeAttribute('hidden');
+      vacioEl?.setAttribute('hidden', '');
+      tablaW?.removeAttribute('hidden');
+      accionesEl?.removeAttribute('hidden');
+      if (tbody) tbody.innerHTML = filas;
+    }
 
-      const filas = carrito.map((l, i) => filaHTML(l, i)).join('');
-      tbody.innerHTML = filas;
+    // ── Drawer móvil ──
+    const tablaWM = document.getElementById('pedido-tabla-wrapper-movil');
+    const tbodyM = document.getElementById('pedido-lineas-movil');
+    const totalElM = document.getElementById('pedido-total-movil');
+    const vacioElM = document.getElementById('carrito-vacio-movil');
+    const accionesElM = document.getElementById('pedido-acciones-movil');
+    const finalizarBtnM = document.getElementById('pedido-finalizar-movil') as HTMLButtonElement | null;
+
+    if (totalElM) totalElM.textContent = totalStr;
+    if (finalizarBtnM) finalizarBtnM.disabled = vacio;
+
+    if (vacio) {
+      tablaWM?.setAttribute('hidden', '');
+      accionesElM?.setAttribute('hidden', '');
+      vacioElM?.removeAttribute('hidden');
+      cerrarFormulario();
+      cerrarDrawer();
+    } else {
+      vacioElM?.setAttribute('hidden', '');
+      tablaWM?.removeAttribute('hidden');
+      accionesElM?.removeAttribute('hidden');
+      if (tbodyM) tbodyM.innerHTML = filas;
+    }
+
+    // ── Barra flotante ──
+    const barra = document.getElementById('barra-pedido-movil');
+    const badge = document.getElementById('barra-badge');
+    const barraTotal = document.getElementById('barra-total');
+
+    if (badge) badge.textContent = String(unidades);
+    if (barraTotal) barraTotal.textContent = totalStr;
+
+    if (barra) {
+      if (vacio) {
+        barra.classList.remove('barra-movil--visible');
+        barra.setAttribute('aria-hidden', 'true');
+      } else {
+        barra.classList.add('barra-movil--visible');
+        barra.removeAttribute('aria-hidden');
+      }
     }
   }
 
@@ -467,6 +772,8 @@ const porCategoria = categorias
     formularioVisible = false;
     const c1 = document.getElementById('formulario-container');
     if (c1) c1.innerHTML = '';
+    const c2 = document.getElementById('formulario-container-movil');
+    if (c2) c2.innerHTML = '';
   }
 
   // ── Formulario ──
@@ -641,10 +948,31 @@ const porCategoria = categorias
   }
 
   attachTablaListeners('pedido-lineas');
+  attachTablaListeners('pedido-lineas-movil');
 
-  // Vaciar
+  // Vaciar (panel desktop)
   document.getElementById('pedido-vaciar')?.addEventListener('click', () => { carrito = []; renderizarCarrito(); });
 
-  // Finalizar
+  // Vaciar (drawer móvil)
+  document.getElementById('pedido-vaciar-movil')?.addEventListener('click', () => { carrito = []; renderizarCarrito(); });
+
+  // Finalizar (panel desktop)
   document.getElementById('pedido-finalizar')?.addEventListener('click', () => mostrarFormulario('formulario-container'));
+
+  // Finalizar (drawer móvil)
+  document.getElementById('pedido-finalizar-movil')?.addEventListener('click', () => mostrarFormulario('formulario-container-movil'));
+
+  // Abrir drawer
+  document.getElementById('barra-abrir-drawer')?.addEventListener('click', abrirDrawer);
+
+  // Cerrar drawer (botón X)
+  document.getElementById('drawer-cerrar')?.addEventListener('click', cerrarDrawer);
+
+  // Cerrar drawer (overlay)
+  document.getElementById('drawer-overlay')?.addEventListener('click', cerrarDrawer);
+
+  // Cerrar drawer con Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarDrawer();
+  });
 </script>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f5efe5"/>
+  <rect x="1" y="1" width="398" height="398" rx="3" fill="none" stroke="#d9cebf" stroke-width="2"/>
+  <!-- Sudadera con capucha -->
+  <path d="M140 135 L115 165 L150 175 L150 275 L250 275 L250 175 L285 165 L260 135 L235 148 C225 130 210 128 200 128 C190 128 175 130 165 148 Z" fill="none" stroke="#32783a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- capucha -->
+  <path d="M165 148 Q175 120 200 118 Q225 120 235 148" fill="none" stroke="#32783a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- bolsillo canguro -->
+  <path d="M168 230 L168 255 Q200 265 232 255 L232 230 Q200 240 168 230 Z" fill="none" stroke="#32783a" stroke-width="2.5"/>
+  <text x="200" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5c4f3f" letter-spacing="2">SUDADERA</text>
+  <text x="200" y="330" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#8a7e6f">Moros Viejos</text>
+</svg>

@@ -1,9 +1,1 @@
-{
-  "id": "camiseta",
-  "nombre": "Camiseta Moros Viejos",
-  "descripcion": "Camiseta de algodón 100% con escudo de la kabila bordado",
-  "precio": 15,
-  "categoria": "ropa",
-  "tallas": ["XS", "S", "M", "L", "XL", "XXL"],
-  "activo": true
-}
+{ "id": "camiseta", "nombre": "Camiseta Moros Viejos", "descripcion": "Camiseta de algodón 100% con escudo de la kabila bordado", "precio": 15, "imagen": "/productos/camiseta.svg", "categoria": "ropa", "tallas": ["XS","S","M","L","XL","XXL"], "activo": true }

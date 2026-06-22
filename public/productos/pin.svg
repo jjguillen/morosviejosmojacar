@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f5efe5"/>
+  <rect x="1" y="1" width="398" height="398" rx="3" fill="none" stroke="#d9cebf" stroke-width="2"/>
+  <!-- Pin / badge circular -->
+  <circle cx="200" cy="192" r="70" fill="none" stroke="#32783a" stroke-width="3"/>
+  <circle cx="200" cy="192" r="58" fill="none" stroke="#32783a" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <!-- estrella / escudo estilizado -->
+  <path d="M200 148 L208 172 L234 172 L213 187 L221 212 L200 197 L179 212 L187 187 L166 172 L192 172 Z" fill="none" stroke="#32783a" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- aguja del pin en la parte trasera -->
+  <line x1="230" y1="248" x2="255" y2="268" stroke="#c5a44c" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="228" cy="246" r="4" fill="#c5a44c"/>
+  <text x="200" y="305" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5c4f3f" letter-spacing="2">PIN</text>
+  <text x="200" y="325" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#8a7e6f">Kabila Alí-Cuquei</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f5efe5"/>
+  <rect x="1" y="1" width="398" height="398" rx="3" fill="none" stroke="#d9cebf" stroke-width="2"/>
+  <!-- Chilaba: silueta larga con capucha árabe -->
+  <!-- cuerpo -->
+  <path d="M155 155 L130 275 L170 275 L180 195 L220 195 L230 275 L270 275 L245 155 Z" fill="none" stroke="#32783a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- cuello en V con capucha puntiaguda -->
+  <path d="M175 155 L200 175 L225 155 L215 130 L200 120 L185 130 Z" fill="none" stroke="#32783a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- mangas -->
+  <path d="M155 155 L120 200 L145 205 L158 170" fill="none" stroke="#32783a" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M245 155 L280 200 L255 205 L242 170" fill="none" stroke="#32783a" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- bordado decorativo -->
+  <path d="M185 200 Q200 196 215 200 Q200 204 185 200" fill="none" stroke="#c5a44c" stroke-width="2"/>
+  <text x="200" y="308" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5c4f3f" letter-spacing="2">CHILABA</text>
+  <text x="200" y="328" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#8a7e6f">Moros Viejos</text>
+</svg>

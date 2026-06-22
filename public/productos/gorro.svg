@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#f5efe5"/>
+  <rect x="1" y="1" width="398" height="398" rx="3" fill="none" stroke="#d9cebf" stroke-width="2"/>
+  <!-- Gorro beanie -->
+  <path d="M135 230 Q135 155 200 145 Q265 155 265 230 Z" fill="none" stroke="#32783a" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="128" y="228" width="144" height="22" rx="4" fill="none" stroke="#32783a" stroke-width="3"/>
+  <!-- pompón -->
+  <circle cx="200" cy="140" r="12" fill="none" stroke="#32783a" stroke-width="2.5"/>
+  <!-- línea decorativa -->
+  <path d="M135 200 Q200 193 265 200" fill="none" stroke="#32783a" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="200" y="290" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#5c4f3f" letter-spacing="2">GORRO</text>
+  <text x="200" y="310" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#8a7e6f">Moros Viejos</text>
+</svg>
